@@ -10,9 +10,6 @@ export function Header() {
           <span className="font-serif text-base font-semibold tracking-[0.2em]">
             SOBHA
           </span>
-          <span className="text-black/50 dark:text-white/50">
-            Academy &amp; SKECT Helpdesk
-          </span>
         </Link>
         <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
           <Link href="/submit" className="whitespace-nowrap hover:underline">

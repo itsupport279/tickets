@@ -7,14 +7,7 @@ export default function Home() {
     <>
       <Header />
       <main className="mx-auto flex max-w-5xl flex-1 flex-col items-center justify-center gap-10 px-6 py-20 text-center">
-        <div className="space-y-6">
-          <Logo iconClassName="h-16 w-16" showTagline className="mx-auto" />
-          <p className="mx-auto max-w-xl text-black/60 dark:text-white/60">
-            Raise a support ticket as an employee of Sobha Academy or SKECT.
-            Staff can view and filter tickets from both organizations in one
-            place.
-          </p>
-        </div>
+        <Logo iconClassName="h-16 w-16" showTagline className="mx-auto" />
         <div className="flex flex-wrap items-center justify-center gap-4">
           <Link
             href="/submit"
