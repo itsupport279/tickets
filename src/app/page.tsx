@@ -1,15 +1,14 @@
 import Link from "next/link";
 import { Header } from "@/components/Header";
+import { Logo } from "@/components/Logo";
 
 export default function Home() {
   return (
     <>
       <Header />
       <main className="mx-auto flex max-w-5xl flex-1 flex-col items-center justify-center gap-10 px-6 py-20 text-center">
-        <div className="space-y-3">
-          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            One helpdesk, two organizations
-          </h1>
+        <div className="space-y-6">
+          <Logo iconClassName="h-16 w-16" showTagline className="mx-auto" />
           <p className="mx-auto max-w-xl text-black/60 dark:text-white/60">
             Raise a support ticket as an employee of Sobha Academy or SKECT.
             Staff can view and filter tickets from both organizations in one

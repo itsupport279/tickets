@@ -16,11 +16,6 @@ export const createTicketSchema = z.object({
   priority: z.enum(priorityValues).default("MEDIUM"),
 });
 
-export const lookupTicketSchema = z.object({
-  reference: z.string().trim().min(3),
-  email: z.string().trim().email(),
-});
-
 export const updateTicketSchema = z.object({
   status: z.enum(statusValues).optional(),
   priority: z.enum(priorityValues).optional(),

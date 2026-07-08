@@ -61,14 +61,14 @@ export function TicketForm() {
     return (
       <div className="rounded-lg border border-black/10 bg-black/[.02] p-6 text-center dark:border-white/15 dark:bg-white/5">
         <p className="text-sm text-black/60 dark:text-white/60">
-          Ticket submitted successfully. Your reference number is
+          Ticket submitted successfully. Your ticket number is
         </p>
         <p className="mt-2 font-mono text-2xl font-semibold tracking-wide">
           {state.reference}
         </p>
         <p className="mt-3 text-sm text-black/60 dark:text-white/60">
-          Save this reference — you&apos;ll need it, along with your email, to
-          check the status of your ticket.
+          Save this number — you&apos;ll need it to check the status of your
+          ticket.
         </p>
         <button
           type="button"

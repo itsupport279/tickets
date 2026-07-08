@@ -8,12 +8,8 @@ export async function GET(
   const { reference } = await params;
   const email = req.nextUrl.searchParams.get("email")?.trim().toLowerCase();
 
-  if (!email) {
-    return NextResponse.json({ error: "Email is required" }, { status: 400 });
-  }
-
   const ticket = await prisma.ticket.findUnique({
-    where: { reference: reference.trim().toUpperCase() },
+    where: { reference: reference.trim() },
     include: {
       notes: {
         orderBy: { createdAt: "asc" },
@@ -22,7 +18,9 @@ export async function GET(
     },
   });
 
-  if (!ticket || ticket.requesterEmail.toLowerCase() !== email) {
+  const emailMatches = !email || ticket?.requesterEmail.toLowerCase() === email;
+
+  if (!ticket || !emailMatches) {
     return NextResponse.json({ error: "Ticket not found" }, { status: 404 });
   }
 

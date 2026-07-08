@@ -42,11 +42,11 @@ export async function POST(req: NextRequest) {
 
   const data = parsed.data;
 
-  let reference = generateReference(data.organization);
+  let reference = generateReference();
   for (let attempt = 0; attempt < 5; attempt++) {
     const existing = await prisma.ticket.findUnique({ where: { reference } });
     if (!existing) break;
-    reference = generateReference(data.organization);
+    reference = generateReference();
   }
 
   const ticket = await prisma.ticket.create({

@@ -38,8 +38,9 @@ export function StatusLookup() {
     setState({ status: "loading" });
 
     try {
+      const query = email ? `?email=${encodeURIComponent(email)}` : "";
       const res = await fetch(
-        `/api/tickets/${encodeURIComponent(reference)}?email=${encodeURIComponent(email)}`,
+        `/api/tickets/${encodeURIComponent(reference)}${query}`,
       );
 
       if (!res.ok) {
@@ -47,7 +48,7 @@ export function StatusLookup() {
           status: "error",
           message:
             res.status === 404
-              ? "No ticket found for that reference and email."
+              ? "No ticket found for that reference."
               : "Something went wrong. Please try again.",
         });
         return;
@@ -95,8 +96,13 @@ export function StatusLookup() {
 
     if (reference) {
       fetchSingle(reference, email);
-    } else {
+    } else if (email) {
       fetchOpenList(email);
+    } else {
+      setState({
+        status: "error",
+        message: "Enter a ticket reference, or your email to see all open tickets.",
+      });
     }
   }
 
@@ -105,14 +111,14 @@ export function StatusLookup() {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:flex-row">
         <input
           name="reference"
-          placeholder="Reference (optional)"
+          placeholder="Ticket number, e.g. 482913"
+          inputMode="numeric"
           className="flex-1 rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/40 dark:border-white/20 dark:focus:border-white/50"
         />
         <input
           name="email"
           type="email"
-          required
-          placeholder="Email used when submitting"
+          placeholder="Email (optional)"
           className="flex-1 rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/40 dark:border-white/20 dark:focus:border-white/50"
         />
         <button
@@ -124,7 +130,8 @@ export function StatusLookup() {
         </button>
       </form>
       <p className="-mt-6 text-xs text-black/50 dark:text-white/50">
-        Leave the reference blank to see all of your tickets that aren&apos;t
+        Enter your ticket number to check its status, or leave it blank and
+        enter your email instead to see all of your tickets that aren&apos;t
         closed yet.
       </p>
 

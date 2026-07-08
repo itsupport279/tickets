@@ -1,12 +1,18 @@
 import Link from "next/link";
+import { LotusMark } from "@/components/Logo";
 
 export function Header() {
   return (
     <header className="border-b border-black/10 dark:border-white/10">
       <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-4 gap-y-3 px-6 py-4">
-        <Link href="/" className="whitespace-nowrap font-semibold tracking-tight">
-          Sobha Academy &amp; SKECT{" "}
-          <span className="text-black/50 dark:text-white/50">Helpdesk</span>
+        <Link href="/" className="flex items-center gap-2 whitespace-nowrap">
+          <LotusMark className="h-7 w-7" />
+          <span className="font-serif text-base font-semibold tracking-[0.2em]">
+            SOBHA
+          </span>
+          <span className="text-black/50 dark:text-white/50">
+            Academy &amp; SKECT Helpdesk
+          </span>
         </Link>
         <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
           <Link href="/submit" className="whitespace-nowrap hover:underline">

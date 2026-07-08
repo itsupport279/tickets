@@ -35,18 +35,6 @@ export function statusLabel(value: string): string {
   return STATUSES.find((s) => s.value === value)?.label ?? value;
 }
 
-const ORG_PREFIX: Record<string, string> = {
-  SOBHA_ACADEMY: "SO",
-  SKECT: "SK",
-};
-
-export function generateReference(organization: string): string {
-  const prefix = ORG_PREFIX[organization] ?? "TK";
-  const now = new Date();
-  const datePart =
-    now.getFullYear().toString().slice(2) +
-    String(now.getMonth() + 1).padStart(2, "0") +
-    String(now.getDate()).padStart(2, "0");
-  const randomPart = Math.random().toString(36).slice(2, 6).toUpperCase();
-  return `${prefix}-${datePart}-${randomPart}`;
+export function generateReference(): string {
+  return String(Math.floor(100000 + Math.random() * 900000));
 }
