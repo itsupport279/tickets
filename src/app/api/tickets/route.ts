@@ -3,6 +3,32 @@ import { prisma } from "@/lib/prisma";
 import { createTicketSchema } from "@/lib/validation";
 import { generateReference } from "@/lib/constants";
 
+export async function GET(req: NextRequest) {
+  const email = req.nextUrl.searchParams.get("email")?.trim().toLowerCase();
+
+  if (!email) {
+    return NextResponse.json({ error: "Email is required" }, { status: 400 });
+  }
+
+  const tickets = await prisma.ticket.findMany({
+    where: {
+      requesterEmail: { equals: email, mode: "insensitive" },
+      status: { not: "CLOSED" },
+    },
+    orderBy: { createdAt: "desc" },
+    select: {
+      reference: true,
+      organization: true,
+      subject: true,
+      priority: true,
+      status: true,
+      createdAt: true,
+    },
+  });
+
+  return NextResponse.json({ tickets });
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => null);
   const parsed = createTicketSchema.safeParse(body);

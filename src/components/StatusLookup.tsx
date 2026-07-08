@@ -15,22 +15,26 @@ type Ticket = {
   updatedAt: string;
   notes: Note[];
 };
+type TicketSummary = {
+  reference: string;
+  organization: string;
+  subject: string;
+  priority: string;
+  status: string;
+  createdAt: string;
+};
 
 type LookupState =
   | { status: "idle" }
   | { status: "loading" }
   | { status: "found"; ticket: Ticket }
+  | { status: "list"; tickets: TicketSummary[]; email: string }
   | { status: "error"; message: string };
 
 export function StatusLookup() {
   const [state, setState] = useState<LookupState>({ status: "idle" });
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const reference = String(formData.get("reference") ?? "").trim();
-    const email = String(formData.get("email") ?? "").trim();
-
+  async function fetchSingle(reference: string, email: string) {
     setState({ status: "loading" });
 
     try {
@@ -59,13 +63,49 @@ export function StatusLookup() {
     }
   }
 
+  async function fetchOpenList(email: string) {
+    setState({ status: "loading" });
+
+    try {
+      const res = await fetch(`/api/tickets?email=${encodeURIComponent(email)}`);
+
+      if (!res.ok) {
+        setState({
+          status: "error",
+          message: "Something went wrong. Please try again.",
+        });
+        return;
+      }
+
+      const data = await res.json();
+      setState({ status: "list", tickets: data.tickets, email });
+    } catch {
+      setState({
+        status: "error",
+        message: "Network error. Please check your connection and try again.",
+      });
+    }
+  }
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const reference = String(formData.get("reference") ?? "").trim();
+    const email = String(formData.get("email") ?? "").trim();
+
+    if (reference) {
+      fetchSingle(reference, email);
+    } else {
+      fetchOpenList(email);
+    }
+  }
+
   return (
     <div className="space-y-8">
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:flex-row">
         <input
           name="reference"
-          required
-          placeholder="Reference, e.g. SA-260708-AB12"
+          placeholder="Reference (optional)"
           className="flex-1 rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/40 dark:border-white/20 dark:focus:border-white/50"
         />
         <input
@@ -78,16 +118,56 @@ export function StatusLookup() {
         <button
           type="submit"
           disabled={state.status === "loading"}
-          className="rounded-md bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-black/80 disabled:opacity-50 dark:bg-white dark:text-black dark:hover:bg-white/85"
+          className="whitespace-nowrap rounded-md bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-black/80 disabled:opacity-50 dark:bg-white dark:text-black dark:hover:bg-white/85"
         >
           {state.status === "loading" ? "Checking…" : "Check status"}
         </button>
       </form>
+      <p className="-mt-6 text-xs text-black/50 dark:text-white/50">
+        Leave the reference blank to see all of your tickets that aren&apos;t
+        closed yet.
+      </p>
 
       {state.status === "error" && (
         <p className="text-sm text-red-600 dark:text-red-400">
           {state.message}
         </p>
+      )}
+
+      {state.status === "list" && (
+        <div className="space-y-3">
+          <p className="text-sm font-medium">
+            {state.tickets.length === 0
+              ? "No open tickets found for that email."
+              : `${state.tickets.length} open ticket${state.tickets.length === 1 ? "" : "s"}`}
+          </p>
+          <ul className="space-y-2">
+            {state.tickets.map((ticket) => (
+              <li key={ticket.reference}>
+                <button
+                  type="button"
+                  onClick={() => fetchSingle(ticket.reference, state.email)}
+                  className="w-full rounded-lg border border-black/10 p-4 text-left text-sm hover:bg-black/[.02] dark:border-white/15 dark:hover:bg-white/5"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="font-mono text-xs text-black/60 dark:text-white/60">
+                      {ticket.reference}
+                    </span>
+                    <span className="rounded-full border border-black/15 px-2.5 py-1 text-xs font-medium dark:border-white/20">
+                      {statusLabel(ticket.status)}
+                    </span>
+                  </div>
+                  <p className="mt-1 font-medium">{ticket.subject}</p>
+                  <p className="mt-1 text-xs text-black/50 dark:text-white/50">
+                    {orgLabel(ticket.organization)} ·{" "}
+                    {priorityLabel(ticket.priority)} · submitted{" "}
+                    {new Date(ticket.createdAt).toLocaleDateString()}
+                  </p>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
 
       {state.status === "found" && (

@@ -17,7 +17,8 @@ export default function StatusPage() {
           </h1>
           <p className="text-sm text-black/60 dark:text-white/60">
             Enter the reference number you received and the email you used
-            when submitting.
+            when submitting — or leave the reference blank to see all of
+            your tickets that are still open.
           </p>
         </div>
         <StatusLookup />
