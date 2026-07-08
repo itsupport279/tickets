@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Organization values: "SABHA_ACADEMY" | "SKECT"
+// Priority values: "LOW" | "MEDIUM" | "HIGH" | "URGENT"
+// Status values: "OPEN" | "IN_PROGRESS" | "RESOLVED" | "CLOSED"
+// Kept as plain strings (not Prisma enums) so the same schema works
+// unchanged on SQLite (dev) and Postgres (prod) — only the datasource
+// provider/url needs to change when deploying.
+
+model Ticket {
+  id             String   @id @default(cuid())
+  reference      String   @unique
+  organization   String
+  requesterName  String
+  requesterEmail String
+  phone          String?
+  department     String?
+  subject        String
+  description    String
+  priority       String   @default("MEDIUM")
+  status         String   @default("OPEN")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  notes          Note[]
+
+  @@index([organization])
+  @@index([status])
+  @@index([reference])
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  ticketId  String
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  author    String
+  message   String
+  createdAt DateTime @default(now())
+
+  @@index([ticketId])
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+}

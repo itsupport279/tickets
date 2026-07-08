@@ -1,0 +1,141 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Suspense } from "react";
+import { prisma } from "@/lib/prisma";
+import { buildTicketWhere } from "@/lib/ticket-filters";
+import { orgLabel, priorityLabel, statusLabel } from "@/lib/constants";
+import { TicketFilters } from "@/components/TicketFilters";
+import { SignOutButton } from "@/components/SignOutButton";
+
+export const metadata: Metadata = {
+  title: "Admin dashboard | Helpdesk",
+};
+
+type SearchParams = {
+  organization?: string;
+  status?: string;
+  priority?: string;
+  search?: string;
+};
+
+export default async function AdminPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const params = await searchParams;
+
+  const where = buildTicketWhere(params);
+
+  const [tickets, groupCounts, totalCount] = await Promise.all([
+    prisma.ticket.findMany({ where, orderBy: { createdAt: "desc" } }),
+    prisma.ticket.groupBy({ by: ["organization"], _count: { _all: true } }),
+    prisma.ticket.count(),
+  ]);
+
+  const orgCounts = Object.fromEntries(
+    groupCounts.map((g) => [g.organization, g._count._all]),
+  );
+
+  return (
+    <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-10">
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Admin dashboard
+          </h1>
+          <p className="text-sm text-black/60 dark:text-white/60">
+            {totalCount} ticket{totalCount === 1 ? "" : "s"} total
+          </p>
+        </div>
+        <SignOutButton />
+      </div>
+
+      <Suspense>
+        <TicketFilters orgCounts={orgCounts} totalCount={totalCount} />
+      </Suspense>
+
+      <div className="mt-6 overflow-x-auto rounded-lg border border-black/10 dark:border-white/15">
+        <table className="w-full text-left text-sm">
+          <thead className="border-b border-black/10 bg-black/[.02] text-xs uppercase tracking-wide text-black/50 dark:border-white/15 dark:bg-white/5 dark:text-white/50">
+            <tr>
+              <th className="px-4 py-3 font-medium">Reference</th>
+              <th className="px-4 py-3 font-medium">Organization</th>
+              <th className="px-4 py-3 font-medium">Subject</th>
+              <th className="px-4 py-3 font-medium">Requester</th>
+              <th className="px-4 py-3 font-medium">Priority</th>
+              <th className="px-4 py-3 font-medium">Status</th>
+              <th className="px-4 py-3 font-medium">Submitted</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tickets.map((ticket) => (
+              <tr
+                key={ticket.id}
+                className="border-b border-black/5 last:border-0 hover:bg-black/[.02] dark:border-white/10 dark:hover:bg-white/5"
+              >
+                <td className="px-4 py-3">
+                  <Link
+                    href={`/admin/tickets/${ticket.id}`}
+                    className="font-mono text-xs hover:underline"
+                  >
+                    {ticket.reference}
+                  </Link>
+                </td>
+                <td className="px-4 py-3">{orgLabel(ticket.organization)}</td>
+                <td className="px-4 py-3">
+                  <Link
+                    href={`/admin/tickets/${ticket.id}`}
+                    className="hover:underline"
+                  >
+                    {ticket.subject}
+                  </Link>
+                </td>
+                <td className="px-4 py-3">
+                  <div>{ticket.requesterName}</div>
+                  <div className="text-xs text-black/50 dark:text-white/50">
+                    {ticket.requesterEmail}
+                  </div>
+                </td>
+                <td className="px-4 py-3">{priorityLabel(ticket.priority)}</td>
+                <td className="px-4 py-3">
+                  <StatusBadge status={ticket.status} />
+                </td>
+                <td className="px-4 py-3 text-black/60 dark:text-white/60">
+                  {ticket.createdAt.toLocaleDateString()}
+                </td>
+              </tr>
+            ))}
+            {tickets.length === 0 && (
+              <tr>
+                <td
+                  colSpan={7}
+                  className="px-4 py-10 text-center text-black/50 dark:text-white/50"
+                >
+                  No tickets match the current filters.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </main>
+  );
+}
+
+function StatusBadge({ status }: { status: string }) {
+  const styles: Record<string, string> = {
+    OPEN: "bg-blue-500/10 text-blue-700 dark:text-blue-400",
+    IN_PROGRESS: "bg-amber-500/10 text-amber-700 dark:text-amber-400",
+    RESOLVED: "bg-green-500/10 text-green-700 dark:text-green-400",
+    CLOSED: "bg-black/10 text-black/60 dark:bg-white/10 dark:text-white/60",
+  };
+
+  return (
+    <span
+      className={`rounded-full px-2.5 py-1 text-xs font-medium ${styles[status] ?? ""}`}
+    >
+      {statusLabel(status)}
+    </span>
+  );
+}
