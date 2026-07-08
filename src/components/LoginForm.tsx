@@ -45,7 +45,7 @@ export function LoginForm() {
           name="username"
           required
           autoComplete="username"
-          className="w-full rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/40 dark:border-white/20 dark:focus:border-white/50"
+          className="w-full rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/40"
         />
       </div>
 
@@ -59,18 +59,16 @@ export function LoginForm() {
           type="password"
           required
           autoComplete="current-password"
-          className="w-full rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/40 dark:border-white/20 dark:focus:border-white/50"
+          className="w-full rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/40"
         />
       </div>
 
-      {error && (
-        <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
-      )}
+      {error && <p className="text-sm text-red-600">{error}</p>}
 
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-md bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-black/80 disabled:opacity-50 dark:bg-white dark:text-black dark:hover:bg-white/85"
+        className="w-full rounded-md bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-black/80 disabled:opacity-50"
       >
         {loading ? "Signing in…" : "Sign in"}
       </button>

@@ -25,18 +25,15 @@ export default async function AdminTicketPage({
 
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-10">
-      <Link
-        href="/admin"
-        className="text-sm text-black/60 hover:underline dark:text-white/60"
-      >
+      <Link href="/admin" className="text-sm text-black/60 hover:underline">
         ← Back to dashboard
       </Link>
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
-        <span className="font-mono text-sm text-black/60 dark:text-white/60">
+        <span className="font-mono text-sm text-black/60">
           {ticket.reference}
         </span>
-        <span className="rounded-full border border-black/15 px-3 py-1 text-xs font-medium dark:border-white/20">
+        <span className="rounded-full border border-black/15 px-3 py-1 text-xs font-medium">
           {orgLabel(ticket.organization)}
         </span>
       </div>
@@ -47,40 +44,40 @@ export default async function AdminTicketPage({
 
       <dl className="mt-4 grid grid-cols-2 gap-3 text-sm sm:grid-cols-3">
         <div>
-          <dt className="text-black/50 dark:text-white/50">Requester</dt>
+          <dt className="text-black/50">Requester</dt>
           <dd>{ticket.requesterName}</dd>
         </div>
         <div>
-          <dt className="text-black/50 dark:text-white/50">Email</dt>
+          <dt className="text-black/50">Email</dt>
           <dd>{ticket.requesterEmail}</dd>
         </div>
         {ticket.phone && (
           <div>
-            <dt className="text-black/50 dark:text-white/50">Phone</dt>
+            <dt className="text-black/50">Phone</dt>
             <dd>{ticket.phone}</dd>
           </div>
         )}
         {ticket.department && (
           <div>
-            <dt className="text-black/50 dark:text-white/50">Department</dt>
+            <dt className="text-black/50">Department</dt>
             <dd>{ticket.department}</dd>
           </div>
         )}
         <div>
-          <dt className="text-black/50 dark:text-white/50">Submitted</dt>
+          <dt className="text-black/50">Submitted</dt>
           <dd>{ticket.createdAt.toLocaleString()}</dd>
         </div>
         <div>
-          <dt className="text-black/50 dark:text-white/50">Last updated</dt>
+          <dt className="text-black/50">Last updated</dt>
           <dd>{ticket.updatedAt.toLocaleString()}</dd>
         </div>
       </dl>
 
-      <p className="mt-6 whitespace-pre-wrap rounded-lg border border-black/10 p-4 text-sm text-black/70 dark:border-white/15 dark:text-white/70">
+      <p className="mt-6 whitespace-pre-wrap rounded-lg border border-black/10 p-4 text-sm text-black/70">
         {ticket.description}
       </p>
 
-      <div className="mt-8 border-t border-black/10 pt-6 dark:border-white/15">
+      <div className="mt-8 border-t border-black/10 pt-6">
         <TicketActions
           ticketId={ticket.id}
           currentStatus={ticket.status}
@@ -89,18 +86,13 @@ export default async function AdminTicketPage({
       </div>
 
       {ticket.notes.length > 0 && (
-        <div className="mt-8 space-y-3 border-t border-black/10 pt-6 dark:border-white/15">
+        <div className="mt-8 space-y-3 border-t border-black/10 pt-6">
           <p className="text-sm font-medium">History</p>
           <ul className="space-y-3">
             {ticket.notes.map((note) => (
-              <li
-                key={note.id}
-                className="rounded-lg bg-black/[.02] p-3 text-sm dark:bg-white/5"
-              >
-                <p className="text-black/70 dark:text-white/70">
-                  {note.message}
-                </p>
-                <p className="mt-1 text-xs text-black/40 dark:text-white/40">
+              <li key={note.id} className="rounded-lg bg-black/[.02] p-3 text-sm">
+                <p className="text-black/70">{note.message}</p>
+                <p className="mt-1 text-xs text-black/40">
                   {note.author} · {note.createdAt.toLocaleString()}
                 </p>
               </li>

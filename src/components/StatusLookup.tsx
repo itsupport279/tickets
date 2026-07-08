@@ -113,32 +113,30 @@ export function StatusLookup() {
           name="reference"
           placeholder="Ticket number, e.g. 482913"
           inputMode="numeric"
-          className="flex-1 rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/40 dark:border-white/20 dark:focus:border-white/50"
+          className="flex-1 rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/40"
         />
         <input
           name="email"
           type="email"
           placeholder="Email (optional)"
-          className="flex-1 rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/40 dark:border-white/20 dark:focus:border-white/50"
+          className="flex-1 rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/40"
         />
         <button
           type="submit"
           disabled={state.status === "loading"}
-          className="whitespace-nowrap rounded-md bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-black/80 disabled:opacity-50 dark:bg-white dark:text-black dark:hover:bg-white/85"
+          className="whitespace-nowrap rounded-md bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-black/80 disabled:opacity-50"
         >
           {state.status === "loading" ? "Checking…" : "Check status"}
         </button>
       </form>
-      <p className="-mt-6 text-xs text-black/50 dark:text-white/50">
+      <p className="-mt-6 text-xs text-black/50">
         Enter your ticket number to check its status, or leave it blank and
         enter your email instead to see all of your tickets that aren&apos;t
         closed yet.
       </p>
 
       {state.status === "error" && (
-        <p className="text-sm text-red-600 dark:text-red-400">
-          {state.message}
-        </p>
+        <p className="text-sm text-red-600">{state.message}</p>
       )}
 
       {state.status === "list" && (
@@ -154,18 +152,18 @@ export function StatusLookup() {
                 <button
                   type="button"
                   onClick={() => fetchSingle(ticket.reference, state.email)}
-                  className="w-full rounded-lg border border-black/10 p-4 text-left text-sm hover:bg-black/[.02] dark:border-white/15 dark:hover:bg-white/5"
+                  className="w-full rounded-lg border border-black/10 p-4 text-left text-sm hover:bg-black/[.02]"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="font-mono text-xs text-black/60 dark:text-white/60">
+                    <span className="font-mono text-xs text-black/60">
                       {ticket.reference}
                     </span>
-                    <span className="rounded-full border border-black/15 px-2.5 py-1 text-xs font-medium dark:border-white/20">
+                    <span className="rounded-full border border-black/15 px-2.5 py-1 text-xs font-medium">
                       {statusLabel(ticket.status)}
                     </span>
                   </div>
                   <p className="mt-1 font-medium">{ticket.subject}</p>
-                  <p className="mt-1 text-xs text-black/50 dark:text-white/50">
+                  <p className="mt-1 text-xs text-black/50">
                     {orgLabel(ticket.organization)} ·{" "}
                     {priorityLabel(ticket.priority)} · submitted{" "}
                     {new Date(ticket.createdAt).toLocaleDateString()}
@@ -178,46 +176,44 @@ export function StatusLookup() {
       )}
 
       {state.status === "found" && (
-        <div className="space-y-4 rounded-lg border border-black/10 p-6 dark:border-white/15">
+        <div className="space-y-4 rounded-lg border border-black/10 p-6">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="font-mono text-sm text-black/60 dark:text-white/60">
+            <span className="font-mono text-sm text-black/60">
               {state.ticket.reference}
             </span>
-            <span className="rounded-full border border-black/15 px-3 py-1 text-xs font-medium dark:border-white/20">
+            <span className="rounded-full border border-black/15 px-3 py-1 text-xs font-medium">
               {statusLabel(state.ticket.status)}
             </span>
           </div>
 
           <h2 className="text-lg font-semibold">{state.ticket.subject}</h2>
-          <p className="whitespace-pre-wrap text-sm text-black/70 dark:text-white/70">
+          <p className="whitespace-pre-wrap text-sm text-black/70">
             {state.ticket.description}
           </p>
 
           <dl className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-3">
             <div>
-              <dt className="text-black/50 dark:text-white/50">Organization</dt>
+              <dt className="text-black/50">Organization</dt>
               <dd>{orgLabel(state.ticket.organization)}</dd>
             </div>
             <div>
-              <dt className="text-black/50 dark:text-white/50">Priority</dt>
+              <dt className="text-black/50">Priority</dt>
               <dd>{priorityLabel(state.ticket.priority)}</dd>
             </div>
             <div>
-              <dt className="text-black/50 dark:text-white/50">Submitted</dt>
+              <dt className="text-black/50">Submitted</dt>
               <dd>{new Date(state.ticket.createdAt).toLocaleString()}</dd>
             </div>
           </dl>
 
           {state.ticket.notes.length > 0 && (
-            <div className="space-y-2 border-t border-black/10 pt-4 dark:border-white/15">
+            <div className="space-y-2 border-t border-black/10 pt-4">
               <p className="text-sm font-medium">Updates</p>
               <ul className="space-y-3">
                 {state.ticket.notes.map((note) => (
                   <li key={note.id} className="text-sm">
-                    <p className="text-black/70 dark:text-white/70">
-                      {note.message}
-                    </p>
-                    <p className="mt-0.5 text-xs text-black/40 dark:text-white/40">
+                    <p className="text-black/70">{note.message}</p>
+                    <p className="mt-0.5 text-xs text-black/40">
                       {new Date(note.createdAt).toLocaleString()}
                     </p>
                   </li>

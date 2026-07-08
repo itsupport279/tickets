@@ -11,13 +11,13 @@ export default function Home() {
         <div className="flex flex-wrap items-center justify-center gap-4">
           <Link
             href="/submit"
-            className="rounded-md bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-black/80 dark:bg-white dark:text-black dark:hover:bg-white/85"
+            className="rounded-md bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-black/80"
           >
             Submit a ticket
           </Link>
           <Link
             href="/status"
-            className="rounded-md border border-black/15 px-5 py-2.5 text-sm font-medium hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
+            className="rounded-md border border-black/15 px-5 py-2.5 text-sm font-medium hover:bg-black/5"
           >
             Check ticket status
           </Link>

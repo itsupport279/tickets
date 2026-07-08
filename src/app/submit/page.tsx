@@ -15,7 +15,7 @@ export default function SubmitPage() {
           <h1 className="text-2xl font-semibold tracking-tight">
             Submit a ticket
           </h1>
-          <p className="text-sm text-black/60 dark:text-white/60">
+          <p className="text-sm text-black/60">
             No account needed. You&apos;ll get a reference number to track
             your ticket.
           </p>

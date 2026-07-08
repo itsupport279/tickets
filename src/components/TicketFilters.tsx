@@ -94,7 +94,7 @@ export function TicketFilters({
 }
 
 const selectClass =
-  "rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/40 dark:border-white/20 dark:focus:border-white/50";
+  "rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/40";
 
 function OrgTab({
   label,
@@ -113,8 +113,8 @@ function OrgTab({
       onClick={onClick}
       className={`rounded-full border px-4 py-1.5 text-sm font-medium transition-colors ${
         active
-          ? "border-black bg-black text-white dark:border-white dark:bg-white dark:text-black"
-          : "border-black/15 hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
+          ? "border-black bg-black text-white"
+          : "border-black/15 hover:bg-black/5"
       }`}
     >
       {label} <span className="opacity-60">({count})</span>

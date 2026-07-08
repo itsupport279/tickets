@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export function Header() {
   return (
-    <header className="border-b border-black/10 dark:border-white/10">
+    <header className="border-b border-black/10">
       <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-4 gap-y-3 px-6 py-4">
         <Link
           href="/"
@@ -27,7 +27,7 @@ export function Header() {
           </Link>
           <Link
             href="/admin"
-            className="whitespace-nowrap rounded-md border border-black/15 px-3 py-1.5 hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
+            className="whitespace-nowrap rounded-md border border-black/15 px-3 py-1.5 hover:bg-black/5"
           >
             Admin
           </Link>

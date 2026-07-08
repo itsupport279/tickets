@@ -44,7 +44,7 @@ export default async function AdminPage({
           <h1 className="text-2xl font-semibold tracking-tight">
             Admin dashboard
           </h1>
-          <p className="text-sm text-black/60 dark:text-white/60">
+          <p className="text-sm text-black/60">
             {totalCount} ticket{totalCount === 1 ? "" : "s"} total
           </p>
         </div>
@@ -55,9 +55,9 @@ export default async function AdminPage({
         <TicketFilters orgCounts={orgCounts} totalCount={totalCount} />
       </Suspense>
 
-      <div className="mt-6 overflow-x-auto rounded-lg border border-black/10 dark:border-white/15">
+      <div className="mt-6 overflow-x-auto rounded-lg border border-black/10">
         <table className="w-full text-left text-sm">
-          <thead className="border-b border-black/10 bg-black/[.02] text-xs uppercase tracking-wide text-black/50 dark:border-white/15 dark:bg-white/5 dark:text-white/50">
+          <thead className="border-b border-black/10 bg-black/[.02] text-xs uppercase tracking-wide text-black/50">
             <tr>
               <th className="px-4 py-3 font-medium">Reference</th>
               <th className="px-4 py-3 font-medium">Organization</th>
@@ -72,7 +72,7 @@ export default async function AdminPage({
             {tickets.map((ticket) => (
               <tr
                 key={ticket.id}
-                className="border-b border-black/5 last:border-0 hover:bg-black/[.02] dark:border-white/10 dark:hover:bg-white/5"
+                className="border-b border-black/5 last:border-0 hover:bg-black/[.02]"
               >
                 <td className="px-4 py-3">
                   <Link
@@ -93,7 +93,7 @@ export default async function AdminPage({
                 </td>
                 <td className="px-4 py-3">
                   <div>{ticket.requesterName}</div>
-                  <div className="text-xs text-black/50 dark:text-white/50">
+                  <div className="text-xs text-black/50">
                     {ticket.requesterEmail}
                   </div>
                 </td>
@@ -101,17 +101,14 @@ export default async function AdminPage({
                 <td className="px-4 py-3">
                   <StatusBadge status={ticket.status} />
                 </td>
-                <td className="px-4 py-3 text-black/60 dark:text-white/60">
+                <td className="px-4 py-3 text-black/60">
                   {ticket.createdAt.toLocaleDateString()}
                 </td>
               </tr>
             ))}
             {tickets.length === 0 && (
               <tr>
-                <td
-                  colSpan={7}
-                  className="px-4 py-10 text-center text-black/50 dark:text-white/50"
-                >
+                <td colSpan={7} className="px-4 py-10 text-center text-black/50">
                   No tickets match the current filters.
                 </td>
               </tr>
@@ -125,10 +122,10 @@ export default async function AdminPage({
 
 function StatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
-    OPEN: "bg-blue-500/10 text-blue-700 dark:text-blue-400",
-    IN_PROGRESS: "bg-amber-500/10 text-amber-700 dark:text-amber-400",
-    RESOLVED: "bg-green-500/10 text-green-700 dark:text-green-400",
-    CLOSED: "bg-black/10 text-black/60 dark:bg-white/10 dark:text-white/60",
+    OPEN: "bg-blue-500/10 text-blue-700",
+    IN_PROGRESS: "bg-amber-500/10 text-amber-700",
+    RESOLVED: "bg-green-500/10 text-green-700",
+    CLOSED: "bg-black/10 text-black/60",
   };
 
   return (

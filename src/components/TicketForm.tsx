@@ -67,21 +67,21 @@ export function TicketForm() {
 
   if (state.status === "success") {
     return (
-      <div className="rounded-lg border border-black/10 bg-black/[.02] p-6 text-center dark:border-white/15 dark:bg-white/5">
-        <p className="text-sm text-black/60 dark:text-white/60">
+      <div className="rounded-lg border border-black/10 bg-black/[.02] p-6 text-center">
+        <p className="text-sm text-black/60">
           Ticket submitted successfully. Your ticket number is
         </p>
         <p className="mt-2 font-mono text-2xl font-semibold tracking-wide">
           {state.reference}
         </p>
-        <p className="mt-3 text-sm text-black/60 dark:text-white/60">
+        <p className="mt-3 text-sm text-black/60">
           Save this number — you&apos;ll need it to check the status of your
           ticket.
         </p>
         <button
           type="button"
           onClick={() => setState({ status: "idle" })}
-          className="mt-5 rounded-md border border-black/15 px-4 py-2 text-sm hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
+          className="mt-5 rounded-md border border-black/15 px-4 py-2 text-sm hover:bg-black/5"
         >
           Submit another ticket
         </button>
@@ -155,7 +155,7 @@ export function TicketForm() {
             }
           />
           {expectedDomain && (
-            <p className="text-xs text-black/50 dark:text-white/50">
+            <p className="text-xs text-black/50">
               Must be a @{expectedDomain} address
             </p>
           )}
@@ -202,15 +202,13 @@ export function TicketForm() {
       </Field>
 
       {state.status === "error" && (
-        <p className="text-sm text-red-600 dark:text-red-400">
-          {state.message}
-        </p>
+        <p className="text-sm text-red-600">{state.message}</p>
       )}
 
       <button
         type="submit"
         disabled={state.status === "submitting"}
-        className="w-full rounded-md bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-black/80 disabled:opacity-50 dark:bg-white dark:text-black dark:hover:bg-white/85"
+        className="w-full rounded-md bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-black/80 disabled:opacity-50"
       >
         {state.status === "submitting" ? "Submitting…" : "Submit ticket"}
       </button>
@@ -219,7 +217,7 @@ export function TicketForm() {
 }
 
 const inputClass =
-  "w-full rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/40 dark:border-white/20 dark:focus:border-white/50";
+  "w-full rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/40";
 const selectClass = inputClass;
 
 function Field({

@@ -15,7 +15,7 @@ export default function StatusPage() {
           <h1 className="text-2xl font-semibold tracking-tight">
             Check ticket status
           </h1>
-          <p className="text-sm text-black/60 dark:text-white/60">
+          <p className="text-sm text-black/60">
             Enter the ticket number you received, or leave it blank and
             enter your email instead to see all of your tickets that are
             still open.

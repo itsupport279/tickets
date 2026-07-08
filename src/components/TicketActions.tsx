@@ -90,9 +90,7 @@ export function TicketActions({
         </div>
       </div>
 
-      {error && (
-        <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
-      )}
+      {error && <p className="text-sm text-red-600">{error}</p>}
 
       <form onSubmit={handleAddNote} className="space-y-2">
         <label htmlFor="note" className="text-sm font-medium">
@@ -109,7 +107,7 @@ export function TicketActions({
         <button
           type="submit"
           disabled={isPending || !noteText.trim()}
-          className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white hover:bg-black/80 disabled:opacity-50 dark:bg-white dark:text-black dark:hover:bg-white/85"
+          className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white hover:bg-black/80 disabled:opacity-50"
         >
           Add note
         </button>
@@ -119,4 +117,4 @@ export function TicketActions({
 }
 
 const selectClass =
-  "rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/40 dark:border-white/20 dark:focus:border-white/50";
+  "rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/40";
