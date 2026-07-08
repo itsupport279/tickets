@@ -5,6 +5,15 @@ export const ORGANIZATIONS = [
 
 export type OrganizationValue = (typeof ORGANIZATIONS)[number]["value"];
 
+export const ORG_EMAIL_DOMAINS: Record<OrganizationValue, string> = {
+  SOBHA_ACADEMY: "thesobhaacademy.com",
+  SKECT: "skect.in",
+};
+
+export function emailDomain(email: string): string {
+  return email.trim().toLowerCase().split("@")[1] ?? "";
+}
+
 export const PRIORITIES = [
   { value: "LOW", label: "Low" },
   { value: "MEDIUM", label: "Medium" },

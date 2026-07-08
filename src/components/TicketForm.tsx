@@ -1,7 +1,12 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { ORGANIZATIONS, PRIORITIES } from "@/lib/constants";
+import {
+  ORGANIZATIONS,
+  ORG_EMAIL_DOMAINS,
+  PRIORITIES,
+  type OrganizationValue,
+} from "@/lib/constants";
 
 type SubmitState =
   | { status: "idle" }
@@ -11,6 +16,8 @@ type SubmitState =
 
 export function TicketForm() {
   const [state, setState] = useState<SubmitState>({ status: "idle" });
+  const [organization, setOrganization] = useState<OrganizationValue | "">("");
+  const expectedDomain = organization ? ORG_EMAIL_DOMAINS[organization] : null;
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -49,6 +56,7 @@ export function TicketForm() {
       const data = await res.json();
       setState({ status: "success", reference: data.reference });
       form.reset();
+      setOrganization("");
     } catch {
       setState({
         status: "error",
@@ -90,6 +98,9 @@ export function TicketForm() {
             name="organization"
             required
             defaultValue=""
+            onChange={(e) =>
+              setOrganization(e.target.value as OrganizationValue | "")
+            }
             className={selectClass}
           >
             <option value="" disabled>
@@ -139,8 +150,15 @@ export function TicketForm() {
             type="email"
             required
             className={inputClass}
-            placeholder="jane@example.com"
+            placeholder={
+              expectedDomain ? `jane@${expectedDomain}` : "jane@example.com"
+            }
           />
+          {expectedDomain && (
+            <p className="text-xs text-black/50 dark:text-white/50">
+              Must be a @{expectedDomain} address
+            </p>
+          )}
         </Field>
       </div>
 

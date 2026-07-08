@@ -34,8 +34,9 @@ export async function POST(req: NextRequest) {
   const parsed = createTicketSchema.safeParse(body);
 
   if (!parsed.success) {
+    const message = parsed.error.issues[0]?.message ?? "Invalid submission";
     return NextResponse.json(
-      { error: "Invalid submission", details: parsed.error.flatten() },
+      { error: message, details: parsed.error.flatten() },
       { status: 400 },
     );
   }
