@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LotusMark } from "@/components/Logo";
+import Image from "next/image";
 
 export function Header() {
   return (
@@ -7,12 +7,16 @@ export function Header() {
       <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-4 gap-y-3 px-6 py-4">
         <Link
           href="/"
-          className="flex items-center gap-2 whitespace-nowrap rounded-lg bg-white px-3 py-1.5"
+          className="flex items-center whitespace-nowrap rounded-lg bg-white px-3 py-1.5"
         >
-          <LotusMark className="h-7 w-7" />
-          <span className="font-logo text-base font-semibold tracking-[0.2em] text-black">
-            SOBHA
-          </span>
+          <Image
+            src="/sobha-logo.png"
+            alt="Sobha"
+            width={312}
+            height={196}
+            style={{ width: 80, height: "auto" }}
+            priority
+          />
         </Link>
         <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
           <Link href="/submit" className="whitespace-nowrap hover:underline">

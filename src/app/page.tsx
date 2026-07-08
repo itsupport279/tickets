@@ -7,7 +7,7 @@ export default function Home() {
     <>
       <Header />
       <main className="mx-auto flex max-w-5xl flex-1 flex-col items-center justify-center gap-10 px-6 py-20 text-center">
-        <Logo iconClassName="h-16 w-16" showTagline className="mx-auto" />
+        <Logo imageWidth={200} showTagline className="mx-auto" />
         <div className="flex flex-wrap items-center justify-center gap-4">
           <Link
             href="/submit"

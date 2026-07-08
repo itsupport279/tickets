@@ -11,7 +11,7 @@ export default function AdminLoginPage() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-sm flex-1 flex-col justify-center px-6 py-12">
       <div className="mb-8 space-y-3 text-center">
-        <Logo iconClassName="h-11 w-11" className="mx-auto" />
+        <Logo imageWidth={140} className="mx-auto" />
         <h1 className="text-2xl font-semibold tracking-tight">Admin login</h1>
       </div>
       <Suspense>
