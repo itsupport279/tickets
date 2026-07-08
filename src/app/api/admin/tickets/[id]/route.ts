@@ -55,3 +55,23 @@ export async function PATCH(
 
   return NextResponse.json({ ticket });
 }
+
+export async function DELETE(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { id } = await params;
+  const ticket = await prisma.ticket.findUnique({ where: { id } });
+  if (!ticket) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  await prisma.ticket.delete({ where: { id } });
+
+  return NextResponse.json({ success: true });
+}

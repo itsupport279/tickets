@@ -36,3 +36,55 @@ export async function GET(
     notes: ticket.notes,
   });
 }
+
+async function findOwnedTicket(reference: string, email: string | null) {
+  if (!email) return null;
+
+  const ticket = await prisma.ticket.findUnique({
+    where: { reference: reference.trim() },
+  });
+
+  if (!ticket || ticket.requesterEmail.toLowerCase() !== email) {
+    return null;
+  }
+
+  return ticket;
+}
+
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ reference: string }> },
+) {
+  const { reference } = await params;
+  const body = await req.json().catch(() => null);
+  const email = typeof body?.email === "string" ? body.email.trim().toLowerCase() : null;
+
+  const ticket = await findOwnedTicket(reference, email);
+  if (!ticket) {
+    return NextResponse.json({ error: "Ticket not found" }, { status: 404 });
+  }
+
+  const updated = await prisma.ticket.update({
+    where: { id: ticket.id },
+    data: { status: "CLOSED" },
+  });
+
+  return NextResponse.json({ status: updated.status });
+}
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ reference: string }> },
+) {
+  const { reference } = await params;
+  const email = req.nextUrl.searchParams.get("email")?.trim().toLowerCase() ?? null;
+
+  const ticket = await findOwnedTicket(reference, email);
+  if (!ticket) {
+    return NextResponse.json({ error: "Ticket not found" }, { status: 404 });
+  }
+
+  await prisma.ticket.delete({ where: { id: ticket.id } });
+
+  return NextResponse.json({ success: true });
+}

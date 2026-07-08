@@ -27,15 +27,19 @@ type TicketSummary = {
 type LookupState =
   | { status: "idle" }
   | { status: "loading" }
-  | { status: "found"; ticket: Ticket }
+  | { status: "found"; ticket: Ticket; email: string }
   | { status: "list"; tickets: TicketSummary[]; email: string }
+  | { status: "deleted" }
   | { status: "error"; message: string };
 
 export function StatusLookup() {
   const [state, setState] = useState<LookupState>({ status: "idle" });
+  const [actionPending, setActionPending] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   async function fetchSingle(reference: string, email: string) {
     setState({ status: "loading" });
+    setActionError(null);
 
     try {
       const query = email ? `?email=${encodeURIComponent(email)}` : "";
@@ -55,7 +59,7 @@ export function StatusLookup() {
       }
 
       const ticket = await res.json();
-      setState({ status: "found", ticket });
+      setState({ status: "found", ticket, email });
     } catch {
       setState({
         status: "error",
@@ -85,6 +89,67 @@ export function StatusLookup() {
         status: "error",
         message: "Network error. Please check your connection and try again.",
       });
+    }
+  }
+
+  async function handleClose(reference: string, email: string) {
+    if (!window.confirm("Close this ticket? You can't reopen it yourself afterward.")) {
+      return;
+    }
+
+    setActionPending(true);
+    setActionError(null);
+
+    try {
+      const res = await fetch(`/api/tickets/${encodeURIComponent(reference)}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!res.ok) {
+        setActionError("Failed to close the ticket.");
+        return;
+      }
+
+      setState((prev) =>
+        prev.status === "found" ? { ...prev, ticket: { ...prev.ticket, status: "CLOSED" } } : prev,
+      );
+    } catch {
+      setActionError("Network error. Please try again.");
+    } finally {
+      setActionPending(false);
+    }
+  }
+
+  async function handleDelete(reference: string, email: string) {
+    if (
+      !window.confirm(
+        "Delete this ticket permanently? This can't be undone.",
+      )
+    ) {
+      return;
+    }
+
+    setActionPending(true);
+    setActionError(null);
+
+    try {
+      const res = await fetch(
+        `/api/tickets/${encodeURIComponent(reference)}?email=${encodeURIComponent(email)}`,
+        { method: "DELETE" },
+      );
+
+      if (!res.ok) {
+        setActionError("Failed to delete the ticket.");
+        return;
+      }
+
+      setState({ status: "deleted" });
+    } catch {
+      setActionError("Network error. Please try again.");
+    } finally {
+      setActionPending(false);
     }
   }
 
@@ -132,11 +197,16 @@ export function StatusLookup() {
       <p className="-mt-6 text-xs text-black/50">
         Enter your ticket number to check its status, or leave it blank and
         enter your email instead to see all of your tickets that aren&apos;t
-        closed yet.
+        closed yet. Include your email with a ticket number to close or
+        delete a ticket you submitted.
       </p>
 
       {state.status === "error" && (
         <p className="text-sm text-red-600">{state.message}</p>
+      )}
+
+      {state.status === "deleted" && (
+        <p className="text-sm text-black/60">Ticket deleted.</p>
       )}
 
       {state.status === "list" && (
@@ -221,6 +291,30 @@ export function StatusLookup() {
               </ul>
             </div>
           )}
+
+          {state.email && (
+            <div className="flex flex-wrap items-center gap-3 border-t border-black/10 pt-4">
+              {state.ticket.status !== "CLOSED" && (
+                <button
+                  type="button"
+                  disabled={actionPending}
+                  onClick={() => handleClose(state.ticket.reference, state.email)}
+                  className="rounded-md border border-black/15 px-4 py-2 text-sm hover:bg-black/5 disabled:opacity-50"
+                >
+                  Close ticket
+                </button>
+              )}
+              <button
+                type="button"
+                disabled={actionPending}
+                onClick={() => handleDelete(state.ticket.reference, state.email)}
+                className="rounded-md border border-red-200 px-4 py-2 text-sm text-red-600 hover:bg-red-50 disabled:opacity-50"
+              >
+                Delete ticket
+              </button>
+            </div>
+          )}
+          {actionError && <p className="text-sm text-red-600">{actionError}</p>}
         </div>
       )}
     </div>

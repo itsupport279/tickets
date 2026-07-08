@@ -54,6 +54,29 @@ export function TicketActions({
     startTransition(() => router.refresh());
   }
 
+  async function handleDelete() {
+    if (
+      !window.confirm(
+        "Delete this ticket permanently? This can't be undone.",
+      )
+    ) {
+      return;
+    }
+
+    setError(null);
+    const res = await fetch(`/api/admin/tickets/${ticketId}`, {
+      method: "DELETE",
+    });
+
+    if (!res.ok) {
+      setError("Failed to delete ticket.");
+      return;
+    }
+
+    router.push("/admin");
+    router.refresh();
+  }
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-4">
@@ -112,6 +135,16 @@ export function TicketActions({
           Add note
         </button>
       </form>
+
+      <div className="border-t border-black/10 pt-6">
+        <button
+          type="button"
+          onClick={handleDelete}
+          className="rounded-md border border-red-200 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+        >
+          Delete ticket
+        </button>
+      </div>
     </div>
   );
 }
