@@ -1,6 +1,6 @@
-# Sabha Academy & SKECT Helpdesk
+# Sobha Academy & SKECT Helpdesk
 
-A shared employee ticketing system for two organizations — **Sabha Academy**
+A shared employee ticketing system for two organizations — **Sobha Academy**
 and **SKECT**. Employees submit tickets with no account required; a small
 admin team logs in to view, filter, and resolve tickets from both
 organizations in one dashboard.
@@ -8,7 +8,7 @@ organizations in one dashboard.
 ## How it works
 
 - **`/submit`** — public form, no login. Employee picks their organization,
-  fills in the issue, and gets a reference number (e.g. `SA-260708-C3FO` /
+  fills in the issue, and gets a reference number (e.g. `SO-260708-C3FO` /
   `SK-260708-QRN7`).
 - **`/status`** — public lookup by reference + email, no login. Shows status
   and any updates left by admins.
@@ -17,7 +17,7 @@ organizations in one dashboard.
   Clicking a ticket lets an admin change status/priority and leave an update
   note (visible to the employee on the `/status` page).
 
-Organizations are plain string values (`SABHA_ACADEMY`, `SKECT`) defined in
+Organizations are plain string values (`SOBHA_ACADEMY`, `SKECT`) defined in
 [`src/lib/constants.ts`](src/lib/constants.ts) — add a third organization
 there (and its `ORG_PREFIX` for reference numbers) if you ever need one.
 

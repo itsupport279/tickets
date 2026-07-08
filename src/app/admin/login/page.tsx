@@ -12,7 +12,7 @@ export default function AdminLoginPage() {
       <div className="mb-8 space-y-1.5 text-center">
         <h1 className="text-2xl font-semibold tracking-tight">Admin login</h1>
         <p className="text-sm text-black/60 dark:text-white/60">
-          Sabha Academy &amp; SKECT helpdesk
+          Sobha Academy &amp; SKECT helpdesk
         </p>
       </div>
       <Suspense>

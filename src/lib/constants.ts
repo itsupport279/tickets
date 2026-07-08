@@ -1,5 +1,5 @@
 export const ORGANIZATIONS = [
-  { value: "SABHA_ACADEMY", label: "Sabha Academy" },
+  { value: "SOBHA_ACADEMY", label: "Sobha Academy" },
   { value: "SKECT", label: "SKECT" },
 ] as const;
 
@@ -36,7 +36,7 @@ export function statusLabel(value: string): string {
 }
 
 const ORG_PREFIX: Record<string, string> = {
-  SABHA_ACADEMY: "SA",
+  SOBHA_ACADEMY: "SO",
   SKECT: "SK",
 };
 

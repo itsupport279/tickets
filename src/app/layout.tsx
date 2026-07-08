@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Helpdesk | Sabha Academy & SKECT",
-  description: "Employee ticketing system for Sabha Academy and SKECT",
+  title: "Helpdesk | Sobha Academy & SKECT",
+  description: "Employee ticketing system for Sobha Academy and SKECT",
 };
 
 export default function RootLayout({

@@ -5,7 +5,7 @@ export function Header() {
     <header className="border-b border-black/10 dark:border-white/10">
       <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-4 gap-y-3 px-6 py-4">
         <Link href="/" className="whitespace-nowrap font-semibold tracking-tight">
-          Sabha Academy &amp; SKECT{" "}
+          Sobha Academy &amp; SKECT{" "}
           <span className="text-black/50 dark:text-white/50">Helpdesk</span>
         </Link>
         <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">

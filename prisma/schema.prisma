@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Organization values: "SABHA_ACADEMY" | "SKECT"
+// Organization values: "SOBHA_ACADEMY" | "SKECT"
 // Priority values: "LOW" | "MEDIUM" | "HIGH" | "URGENT"
 // Status values: "OPEN" | "IN_PROGRESS" | "RESOLVED" | "CLOSED"
 // Kept as plain strings (not Prisma enums) — simple and portable.

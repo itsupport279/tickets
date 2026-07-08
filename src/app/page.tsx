@@ -11,7 +11,7 @@ export default function Home() {
             One helpdesk, two organizations
           </h1>
           <p className="mx-auto max-w-xl text-black/60 dark:text-white/60">
-            Raise a support ticket as an employee of Sabha Academy or SKECT.
+            Raise a support ticket as an employee of Sobha Academy or SKECT.
             Staff can view and filter tickets from both organizations in one
             place.
           </p>
