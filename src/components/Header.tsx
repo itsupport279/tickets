@@ -5,9 +5,12 @@ export function Header() {
   return (
     <header className="border-b border-black/10 dark:border-white/10">
       <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-4 gap-y-3 px-6 py-4">
-        <Link href="/" className="flex items-center gap-2 whitespace-nowrap">
+        <Link
+          href="/"
+          className="flex items-center gap-2 whitespace-nowrap rounded-lg bg-white px-3 py-1.5"
+        >
           <LotusMark className="h-7 w-7" />
-          <span className="font-logo text-base font-semibold tracking-[0.2em]">
+          <span className="font-logo text-base font-semibold tracking-[0.2em] text-black">
             SOBHA
           </span>
         </Link>

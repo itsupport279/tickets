@@ -5,7 +5,7 @@ export function LotusMark({ className }: { className?: string }) {
     <svg
       viewBox="0 0 200 200"
       className={className}
-      fill="currentColor"
+      fill="#000"
       aria-hidden="true"
     >
       <g transform="translate(100,130)">
@@ -43,13 +43,15 @@ export function Logo({
   showTagline?: boolean;
 }) {
   return (
-    <div className={`flex flex-col items-center ${className}`}>
+    <div
+      className={`inline-flex flex-col items-center rounded-xl bg-white px-6 py-4 ${className}`}
+    >
       <LotusMark className={iconClassName} />
-      <span className="mt-1 font-logo text-xl font-semibold tracking-[0.3em]">
+      <span className="mt-1 font-logo text-xl font-semibold tracking-[0.3em] text-black">
         SOBHA
       </span>
       {showTagline && (
-        <span className="mt-0.5 text-[10px] font-medium tracking-[0.25em] text-black/50 dark:text-white/50">
+        <span className="mt-0.5 text-[10px] font-medium tracking-[0.25em] text-black/50">
           DEVOTION AT WORK
         </span>
       )}
