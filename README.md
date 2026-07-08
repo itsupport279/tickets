@@ -24,15 +24,27 @@ there (and its `ORG_PREFIX` for reference numbers) if you ever need one.
 ## Tech stack
 
 Next.js 16 (App Router) + TypeScript + Tailwind CSS, Prisma ORM, Auth.js
-(NextAuth v5) for admin login. Data is stored in SQLite locally and
-Postgres in production — same schema, one line changed at deploy time (see
-below).
+(NextAuth v5) for admin login. Data lives in Postgres (Neon's free tier) —
+the same database is used for local development and production, so there's
+no schema drift to worry about.
 
 ## Local development
 
 ```bash
 npm install
-npm run db:push     # creates prisma/dev.db from the schema
+```
+
+Create a `.env` file (see `.env.example`) with:
+
+```
+DATABASE_URL="<your neon connection string>"
+AUTH_SECRET="<any random string for local dev>"
+```
+
+Then:
+
+```bash
+npm run db:push     # syncs the schema to your database
 npm run db:seed     # creates the default admin (see below)
 npm run dev          # http://localhost:3000
 ```
@@ -58,41 +70,16 @@ tiers.
 
 (Supabase's free Postgres works the same way if you prefer it.)
 
-### 2. Switch the schema from SQLite to Postgres
-
-Open [`prisma/schema.prisma`](prisma/schema.prisma) and change:
-
-```prisma
-datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
-}
-```
-
-to:
-
-```prisma
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-```
-
-This is the only code change needed to go from local dev to production.
-
-### 3. Push the schema to your production database
+### 2. Push the schema and seed the first admin
 
 ```bash
 # in your shell, not committed anywhere:
 $env:DATABASE_URL="<your neon connection string>"   # PowerShell
 npx prisma db push
-npm run db:seed   # creates the first admin in production
+$env:SEED_ADMIN_PASSWORD="<a real password>"; npm run db:seed
 ```
 
-(On the seed step, set `SEED_ADMIN_PASSWORD` to something real —
-don't ship the default password to production.)
-
-### 4. Push this project to GitHub
+### 3. Push this project to GitHub
 
 ```bash
 git init
@@ -101,7 +88,7 @@ git commit -m "Initial helpdesk app"
 gh repo create --source=. --private --push
 ```
 
-### 5. Deploy to Vercel
+### 4. Deploy to Vercel
 
 1. Go to [vercel.com](https://vercel.com) and sign up (free tier), then
    "Add New Project" → import the GitHub repo you just created.
@@ -120,5 +107,5 @@ staff.
 
 Any `git push` to the connected branch redeploys automatically. If you
 change `prisma/schema.prisma`, run `npx prisma db push` (with
-`DATABASE_URL` pointed at the production database) before or after
-deploying so the live database matches the schema.
+`DATABASE_URL` pointed at the production database) so the live database
+matches the schema.

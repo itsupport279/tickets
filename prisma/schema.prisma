@@ -3,16 +3,14 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 // Organization values: "SABHA_ACADEMY" | "SKECT"
 // Priority values: "LOW" | "MEDIUM" | "HIGH" | "URGENT"
 // Status values: "OPEN" | "IN_PROGRESS" | "RESOLVED" | "CLOSED"
-// Kept as plain strings (not Prisma enums) so the same schema works
-// unchanged on SQLite (dev) and Postgres (prod) — only the datasource
-// provider/url needs to change when deploying.
+// Kept as plain strings (not Prisma enums) — simple and portable.
 
 model Ticket {
   id             String   @id @default(cuid())
