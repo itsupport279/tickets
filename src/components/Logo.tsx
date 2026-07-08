@@ -45,7 +45,7 @@ export function Logo({
   return (
     <div className={`flex flex-col items-center ${className}`}>
       <LotusMark className={iconClassName} />
-      <span className="mt-1 font-serif text-xl font-semibold tracking-[0.3em]">
+      <span className="mt-1 font-logo text-xl font-semibold tracking-[0.3em]">
         SOBHA
       </span>
       {showTagline && (

@@ -7,7 +7,7 @@ export function Header() {
       <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-4 gap-y-3 px-6 py-4">
         <Link href="/" className="flex items-center gap-2 whitespace-nowrap">
           <LotusMark className="h-7 w-7" />
-          <span className="font-serif text-base font-semibold tracking-[0.2em]">
+          <span className="font-logo text-base font-semibold tracking-[0.2em]">
             SOBHA
           </span>
         </Link>
