@@ -19,8 +19,19 @@ resolve tickets from all three organizations in one dashboard.
   with tabs/filters by organization, status, priority, and free-text search.
   Clicking a ticket lets an admin change status/priority, leave an update
   note (visible to the employee on the `/status` page), or delete it.
+- **`/admin/new`** — login required. Any admin can log a ticket on an
+  employee's behalf (e.g. from a phone call).
 - **`/admin/reports`** — login required. Filter tickets by organization and
   date range, then export the results as a PDF or an Excel (.xlsx) file.
+- **`/admin/admins`** — super admin only. Lists admin accounts and creates
+  co-admins. Co-admins have full ticket/report access but can't create more
+  admins or view login logs.
+- **`/admin/logs`** — super admin only. Shows every admin login (username,
+  role, IP, user agent, timestamp) from the last 30 days.
+
+The first admin (seeded via `npm run db:seed`) is always the **super
+admin** (`Admin.role = "SUPER_ADMIN"`); admins created afterward via
+`/admin/admins` get `role = "ADMIN"` and can't create further admins.
 
 Organizations are plain string values (`SOBHA_ACADEMY`, `SKECT`,
 `SOBHA_HEALTH_CARE`) defined in [`src/lib/constants.ts`](src/lib/constants.ts),

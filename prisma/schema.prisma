@@ -10,6 +10,7 @@ datasource db {
 // Organization values: "SOBHA_ACADEMY" | "SKECT" | "SOBHA_HEALTH_CARE"
 // Priority values: "LOW" | "MEDIUM" | "HIGH" | "URGENT"
 // Status values: "OPEN" | "IN_PROGRESS" | "RESOLVED" | "CLOSED"
+// Admin role values: "SUPER_ADMIN" | "ADMIN"
 // Kept as plain strings (not Prisma enums) — simple and portable.
 
 model Ticket {
@@ -45,9 +46,24 @@ model Note {
 }
 
 model Admin {
-  id           String   @id @default(cuid())
-  username     String   @unique
+  id           String          @id @default(cuid())
+  username     String          @unique
   passwordHash String
   name         String?
-  createdAt    DateTime @default(now())
+  role         String          @default("ADMIN")
+  createdAt    DateTime        @default(now())
+  loginLogs    AdminLoginLog[]
+}
+
+model AdminLoginLog {
+  id        String   @id @default(cuid())
+  adminId   String
+  admin     Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  username  String
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([adminId])
+  @@index([createdAt])
 }

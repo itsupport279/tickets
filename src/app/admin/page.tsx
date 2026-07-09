@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { buildTicketWhere } from "@/lib/ticket-filters";
 import { orgLabel, priorityLabel, statusLabel } from "@/lib/constants";
@@ -24,6 +25,8 @@ export default async function AdminPage({
   searchParams: Promise<SearchParams>;
 }) {
   const params = await searchParams;
+  const session = await auth();
+  const isSuperAdmin = session?.user.role === "SUPER_ADMIN";
 
   const where = buildTicketWhere(params);
 
@@ -50,11 +53,33 @@ export default async function AdminPage({
         </div>
         <div className="flex items-center gap-3">
           <Link
+            href="/admin/new"
+            className="rounded-md border border-black/15 px-3 py-1.5 text-sm hover:bg-black/5"
+          >
+            New ticket
+          </Link>
+          <Link
             href="/admin/reports"
             className="rounded-md border border-black/15 px-3 py-1.5 text-sm hover:bg-black/5"
           >
             Reports
           </Link>
+          {isSuperAdmin && (
+            <>
+              <Link
+                href="/admin/admins"
+                className="rounded-md border border-black/15 px-3 py-1.5 text-sm hover:bg-black/5"
+              >
+                Admins
+              </Link>
+              <Link
+                href="/admin/logs"
+                className="rounded-md border border-black/15 px-3 py-1.5 text-sm hover:bg-black/5"
+              >
+                Login logs
+              </Link>
+            </>
+          )}
           <SignOutButton />
         </div>
       </div>

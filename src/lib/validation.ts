@@ -42,3 +42,14 @@ export const updateTicketSchema = z.object({
 export const addNoteSchema = z.object({
   message: z.string().trim().min(1).max(3000),
 });
+
+export const createAdminSchema = z.object({
+  username: z
+    .string()
+    .trim()
+    .min(3, "Username is too short")
+    .max(50)
+    .regex(/^[a-zA-Z0-9_.-]+$/, "Only letters, numbers, and _ . - are allowed"),
+  password: z.string().min(8, "Password must be at least 8 characters").max(200),
+  name: z.string().trim().max(120).optional().or(z.literal("")),
+});
