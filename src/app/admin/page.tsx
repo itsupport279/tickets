@@ -4,9 +4,10 @@ import { Suspense } from "react";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { buildTicketWhere } from "@/lib/ticket-filters";
-import { orgLabel, priorityLabel, statusLabel } from "@/lib/constants";
+import { orgLabel, priorityLabel } from "@/lib/constants";
 import { TicketFilters } from "@/components/TicketFilters";
 import { SignOutButton } from "@/components/SignOutButton";
+import { StatusBadge } from "@/components/StatusBadge";
 
 export const metadata: Metadata = {
   title: "Admin dashboard | Helpdesk",
@@ -152,22 +153,5 @@ export default async function AdminPage({
         </table>
       </div>
     </main>
-  );
-}
-
-function StatusBadge({ status }: { status: string }) {
-  const styles: Record<string, string> = {
-    OPEN: "bg-blue-500/10 text-blue-700",
-    IN_PROGRESS: "bg-amber-500/10 text-amber-700",
-    RESOLVED: "bg-green-500/10 text-green-700",
-    CLOSED: "bg-black/10 text-black/60",
-  };
-
-  return (
-    <span
-      className={`rounded-full px-2.5 py-1 text-xs font-medium ${styles[status] ?? ""}`}
-    >
-      {statusLabel(status)}
-    </span>
   );
 }

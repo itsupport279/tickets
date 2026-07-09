@@ -2,12 +2,13 @@
 
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
-import { ORGANIZATIONS, orgLabel, priorityLabel, statusLabel } from "@/lib/constants";
+import { ORGANIZATIONS, orgLabel, priorityLabel } from "@/lib/constants";
 import {
   exportTicketsToPdf,
   exportTicketsToExcel,
   type ReportTicket,
 } from "@/lib/report-export";
+import { StatusBadge } from "@/components/StatusBadge";
 
 export default function ReportsPage() {
   const [organization, setOrganization] = useState("ALL");
@@ -178,7 +179,9 @@ export default function ReportsPage() {
                     <td className="px-4 py-3">{t.subject}</td>
                     <td className="px-4 py-3">{t.requesterName}</td>
                     <td className="px-4 py-3">{priorityLabel(t.priority)}</td>
-                    <td className="px-4 py-3">{statusLabel(t.status)}</td>
+                    <td className="px-4 py-3">
+                      <StatusBadge status={t.status} />
+                    </td>
                     <td className="px-4 py-3">
                       {new Date(t.createdAt).toLocaleDateString()}
                     </td>

@@ -39,7 +39,11 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json().catch(() => null);
-  const parsed = createAdminTicketSchema.safeParse(body);
+
+  // The requester is always the creating admin's own username — not
+  // client-supplied, so it can't be spoofed via the request body.
+  const payload = { ...(body ?? {}), requesterName: session.user.username };
+  const parsed = createAdminTicketSchema.safeParse(payload);
 
   if (!parsed.success) {
     const message = parsed.error.issues[0]?.message ?? "Invalid submission";

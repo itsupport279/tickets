@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { auth } from "@/auth";
 import { AdminTicketForm } from "@/components/AdminTicketForm";
 
 export const metadata: Metadata = {
   title: "New ticket | Helpdesk",
 };
 
-export default function AdminNewTicketPage() {
+export default async function AdminNewTicketPage() {
+  const session = await auth();
+
   return (
     <main className="mx-auto w-full max-w-2xl flex-1 px-6 py-10">
       <Link href="/admin" className="text-sm text-black/60 hover:underline">
@@ -20,7 +23,7 @@ export default function AdminNewTicketPage() {
           Log a ticket on behalf of an employee.
         </p>
       </div>
-      <AdminTicketForm />
+      <AdminTicketForm requesterUsername={session?.user.username ?? ""} />
     </main>
   );
 }

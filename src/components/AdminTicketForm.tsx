@@ -14,7 +14,11 @@ type SubmitState =
   | { status: "submitting" }
   | { status: "error"; message: string };
 
-export function AdminTicketForm() {
+export function AdminTicketForm({
+  requesterUsername,
+}: {
+  requesterUsername: string;
+}) {
   const router = useRouter();
   const [state, setState] = useState<SubmitState>({ status: "idle" });
   const [organization, setOrganization] = useState<OrganizationValue | "">("");
@@ -24,9 +28,10 @@ export function AdminTicketForm() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
+    // requesterName isn't sent — the server always sets it to the
+    // signed-in admin's username, so there's nothing to submit here.
     const payload = {
       organization: formData.get("organization"),
-      requesterName: formData.get("requesterName"),
       requesterEmail: formData.get("requesterEmail"),
       phone: formData.get("phone"),
       department: formData.get("department"),
@@ -105,16 +110,17 @@ export function AdminTicketForm() {
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Requester name" htmlFor="requesterName">
+        <Field label="Requester" htmlFor="requesterUsername">
           <input
-            id="requesterName"
-            name="requesterName"
+            id="requesterUsername"
             type="text"
-            required
-            minLength={2}
-            className={inputClass}
-            placeholder="Jane Doe"
+            value={requesterUsername}
+            disabled
+            className={`${inputClass} cursor-not-allowed opacity-60`}
           />
+          <p className="text-xs text-black/50">
+            Automatically set to your admin username
+          </p>
         </Field>
 
         <Field label="Requester email (optional)" htmlFor="requesterEmail">

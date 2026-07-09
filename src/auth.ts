@@ -63,6 +63,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           name: admin.name ?? admin.username,
           email: undefined,
           role: admin.role,
+          username: admin.username,
         };
       },
     }),
@@ -72,12 +73,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     jwt: async ({ token, user }) => {
       if (user) {
         token.role = user.role;
+        token.username = user.username;
       }
       return token;
     },
     session: async ({ session, token }) => {
       if (session.user) {
         session.user.role = (token.role as string | undefined) ?? "ADMIN";
+        session.user.username = (token.username as string | undefined) ?? "";
       }
       return session;
     },

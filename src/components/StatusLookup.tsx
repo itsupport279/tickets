@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { orgLabel, priorityLabel, statusLabel } from "@/lib/constants";
+import { orgLabel, priorityLabel } from "@/lib/constants";
+import { StatusBadge } from "@/components/StatusBadge";
 
 type Note = { id: string; message: string; createdAt: string };
 type Ticket = {
@@ -271,9 +272,7 @@ export function StatusLookup() {
                     <span className="font-mono text-xs text-black/60">
                       {ticket.reference}
                     </span>
-                    <span className="rounded-full border border-black/15 px-2.5 py-1 text-xs font-medium">
-                      {statusLabel(ticket.status)}
-                    </span>
+                    <StatusBadge status={ticket.status} />
                   </div>
                   <p className="mt-1 font-medium">{ticket.subject}</p>
                   <p className="mt-1 text-xs text-black/50">
@@ -315,9 +314,7 @@ export function StatusLookup() {
             <span className="font-mono text-sm text-black/60">
               {state.ticket.reference}
             </span>
-            <span className="rounded-full border border-black/15 px-3 py-1 text-xs font-medium">
-              {statusLabel(state.ticket.status)}
-            </span>
+            <StatusBadge status={state.ticket.status} />
           </div>
 
           <h2 className="text-lg font-semibold">{state.ticket.subject}</h2>

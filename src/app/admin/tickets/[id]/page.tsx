@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { orgLabel } from "@/lib/constants";
 import { TicketActions } from "@/components/TicketActions";
+import { StatusBadge } from "@/components/StatusBadge";
 
 export const metadata: Metadata = {
   title: "Ticket detail | Helpdesk",
@@ -33,9 +34,12 @@ export default async function AdminTicketPage({
         <span className="font-mono text-sm text-black/60">
           {ticket.reference}
         </span>
-        <span className="rounded-full border border-black/15 px-3 py-1 text-xs font-medium">
-          {orgLabel(ticket.organization)}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="rounded-full border border-black/15 px-3 py-1 text-xs font-medium">
+            {orgLabel(ticket.organization)}
+          </span>
+          <StatusBadge status={ticket.status} />
+        </div>
       </div>
 
       <h1 className="mt-2 text-2xl font-semibold tracking-tight">
