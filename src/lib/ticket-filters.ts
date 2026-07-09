@@ -5,6 +5,8 @@ export type TicketFilters = {
   status?: string | null;
   priority?: string | null;
   search?: string | null;
+  dateFrom?: string | null;
+  dateTo?: string | null;
 };
 
 export function buildTicketWhere(filters: TicketFilters): Prisma.TicketWhereInput {
@@ -29,6 +31,20 @@ export function buildTicketWhere(filters: TicketFilters): Prisma.TicketWhereInpu
       { requesterEmail: { contains: search } },
       { reference: { contains: search } },
     ];
+  }
+
+  const from = filters.dateFrom ? new Date(filters.dateFrom) : null;
+  const to = filters.dateTo ? new Date(filters.dateTo) : null;
+  if ((from && !isNaN(from.getTime())) || (to && !isNaN(to.getTime()))) {
+    where.createdAt = {};
+    if (from && !isNaN(from.getTime())) {
+      where.createdAt.gte = from;
+    }
+    if (to && !isNaN(to.getTime())) {
+      const endOfDay = new Date(to);
+      endOfDay.setHours(23, 59, 59, 999);
+      where.createdAt.lte = endOfDay;
+    }
   }
 
   return where;

@@ -48,7 +48,15 @@ export default async function AdminPage({
             {totalCount} ticket{totalCount === 1 ? "" : "s"} total
           </p>
         </div>
-        <SignOutButton />
+        <div className="flex items-center gap-3">
+          <Link
+            href="/admin/reports"
+            className="rounded-md border border-black/15 px-3 py-1.5 text-sm hover:bg-black/5"
+          >
+            Reports
+          </Link>
+          <SignOutButton />
+        </div>
       </div>
 
       <Suspense>

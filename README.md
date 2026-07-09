@@ -18,6 +18,8 @@ organizations in one dashboard.
   with tabs/filters by organization, status, priority, and free-text search.
   Clicking a ticket lets an admin change status/priority, leave an update
   note (visible to the employee on the `/status` page), or delete it.
+- **`/admin/reports`** — login required. Filter tickets by organization and
+  date range, then export the results as a PDF or an Excel (.xlsx) file.
 
 Organizations are plain string values (`SOBHA_ACADEMY`, `SKECT`) defined in
 [`src/lib/constants.ts`](src/lib/constants.ts), along with their reference
