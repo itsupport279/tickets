@@ -9,7 +9,7 @@ export async function GET(
   const email = req.nextUrl.searchParams.get("email")?.trim().toLowerCase();
 
   const ticket = await prisma.ticket.findUnique({
-    where: { reference: reference.trim() },
+    where: { reference: reference.trim().toUpperCase() },
     include: {
       notes: {
         orderBy: { createdAt: "asc" },
@@ -37,29 +37,15 @@ export async function GET(
   });
 }
 
-async function findOwnedTicket(reference: string, email: string | null) {
-  if (!email) return null;
-
-  const ticket = await prisma.ticket.findUnique({
-    where: { reference: reference.trim() },
-  });
-
-  if (!ticket || ticket.requesterEmail.toLowerCase() !== email) {
-    return null;
-  }
-
-  return ticket;
-}
-
 export async function PATCH(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ reference: string }> },
 ) {
   const { reference } = await params;
-  const body = await req.json().catch(() => null);
-  const email = typeof body?.email === "string" ? body.email.trim().toLowerCase() : null;
 
-  const ticket = await findOwnedTicket(reference, email);
+  const ticket = await prisma.ticket.findUnique({
+    where: { reference: reference.trim().toUpperCase() },
+  });
   if (!ticket) {
     return NextResponse.json({ error: "Ticket not found" }, { status: 404 });
   }
@@ -73,13 +59,14 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ reference: string }> },
 ) {
   const { reference } = await params;
-  const email = req.nextUrl.searchParams.get("email")?.trim().toLowerCase() ?? null;
 
-  const ticket = await findOwnedTicket(reference, email);
+  const ticket = await prisma.ticket.findUnique({
+    where: { reference: reference.trim().toUpperCase() },
+  });
   if (!ticket) {
     return NextResponse.json({ error: "Ticket not found" }, { status: 404 });
   }

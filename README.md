@@ -8,18 +8,21 @@ organizations in one dashboard.
 ## How it works
 
 - **`/submit`** — public form, no login. Employee picks their organization,
-  fills in the issue, and gets a 6-digit ticket number (e.g. `482913`).
+  fills in the issue, and gets a ticket number prefixed by organization —
+  `TSA-482913` for Sobha Academy, `SKT-482913` for SKECT.
 - **`/status`** — public lookup, no login. Enter the ticket number to check
-  its status (email optional), or leave the number blank and enter an email
-  instead to see every ticket tied to it that isn't closed.
+  its status, or leave it blank and enter an email instead to see every
+  ticket tied to it that isn't closed. From a found ticket, anyone with the
+  ticket number can close or delete it.
 - **`/admin`** — login required. Lists every ticket from both organizations
   with tabs/filters by organization, status, priority, and free-text search.
-  Clicking a ticket lets an admin change status/priority and leave an update
-  note (visible to the employee on the `/status` page).
+  Clicking a ticket lets an admin change status/priority, leave an update
+  note (visible to the employee on the `/status` page), or delete it.
 
 Organizations are plain string values (`SOBHA_ACADEMY`, `SKECT`) defined in
-[`src/lib/constants.ts`](src/lib/constants.ts) — add a third organization
-there if you ever need one.
+[`src/lib/constants.ts`](src/lib/constants.ts), along with their reference
+prefixes (`ORG_REFERENCE_PREFIX`) and required email domains
+(`ORG_EMAIL_DOMAINS`) — add a third organization there if you ever need one.
 
 ## Tech stack
 

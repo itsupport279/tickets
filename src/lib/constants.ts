@@ -44,6 +44,13 @@ export function statusLabel(value: string): string {
   return STATUSES.find((s) => s.value === value)?.label ?? value;
 }
 
-export function generateReference(): string {
-  return String(Math.floor(100000 + Math.random() * 900000));
+export const ORG_REFERENCE_PREFIX: Record<OrganizationValue, string> = {
+  SOBHA_ACADEMY: "TSA",
+  SKECT: "SKT",
+};
+
+export function generateReference(organization: OrganizationValue): string {
+  const prefix = ORG_REFERENCE_PREFIX[organization];
+  const number = Math.floor(100000 + Math.random() * 900000);
+  return `${prefix}-${number}`;
 }

@@ -92,8 +92,8 @@ export function StatusLookup() {
     }
   }
 
-  async function handleClose(reference: string, email: string) {
-    if (!window.confirm("Close this ticket? You can't reopen it yourself afterward.")) {
+  async function handleClose(reference: string) {
+    if (!window.confirm("Close this ticket?")) {
       return;
     }
 
@@ -103,8 +103,6 @@ export function StatusLookup() {
     try {
       const res = await fetch(`/api/tickets/${encodeURIComponent(reference)}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
       });
 
       if (!res.ok) {
@@ -122,7 +120,7 @@ export function StatusLookup() {
     }
   }
 
-  async function handleDelete(reference: string, email: string) {
+  async function handleDelete(reference: string) {
     if (
       !window.confirm(
         "Delete this ticket permanently? This can't be undone.",
@@ -135,10 +133,9 @@ export function StatusLookup() {
     setActionError(null);
 
     try {
-      const res = await fetch(
-        `/api/tickets/${encodeURIComponent(reference)}?email=${encodeURIComponent(email)}`,
-        { method: "DELETE" },
-      );
+      const res = await fetch(`/api/tickets/${encodeURIComponent(reference)}`, {
+        method: "DELETE",
+      });
 
       if (!res.ok) {
         setActionError("Failed to delete the ticket.");
@@ -176,8 +173,7 @@ export function StatusLookup() {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:flex-row">
         <input
           name="reference"
-          placeholder="Ticket number, e.g. 482913"
-          inputMode="numeric"
+          placeholder="Ticket number, e.g. TSA-482913"
           className="flex-1 rounded-md border border-black/15 bg-transparent px-3 py-2 text-sm outline-none focus:border-black/40"
         />
         <input
@@ -197,8 +193,7 @@ export function StatusLookup() {
       <p className="-mt-6 text-xs text-black/50">
         Enter your ticket number to check its status, or leave it blank and
         enter your email instead to see all of your tickets that aren&apos;t
-        closed yet. Include your email with a ticket number to close or
-        delete a ticket you submitted.
+        closed yet.
       </p>
 
       {state.status === "error" && (
@@ -292,28 +287,26 @@ export function StatusLookup() {
             </div>
           )}
 
-          {state.email && (
-            <div className="flex flex-wrap items-center gap-3 border-t border-black/10 pt-4">
-              {state.ticket.status !== "CLOSED" && (
-                <button
-                  type="button"
-                  disabled={actionPending}
-                  onClick={() => handleClose(state.ticket.reference, state.email)}
-                  className="rounded-md border border-black/15 px-4 py-2 text-sm hover:bg-black/5 disabled:opacity-50"
-                >
-                  Close ticket
-                </button>
-              )}
+          <div className="flex flex-wrap items-center gap-3 border-t border-black/10 pt-4">
+            {state.ticket.status !== "CLOSED" && (
               <button
                 type="button"
                 disabled={actionPending}
-                onClick={() => handleDelete(state.ticket.reference, state.email)}
-                className="rounded-md border border-red-200 px-4 py-2 text-sm text-red-600 hover:bg-red-50 disabled:opacity-50"
+                onClick={() => handleClose(state.ticket.reference)}
+                className="rounded-md border border-black/15 px-4 py-2 text-sm hover:bg-black/5 disabled:opacity-50"
               >
-                Delete ticket
+                Close ticket
               </button>
-            </div>
-          )}
+            )}
+            <button
+              type="button"
+              disabled={actionPending}
+              onClick={() => handleDelete(state.ticket.reference)}
+              className="rounded-md border border-red-200 px-4 py-2 text-sm text-red-600 hover:bg-red-50 disabled:opacity-50"
+            >
+              Delete ticket
+            </button>
+          </div>
           {actionError && <p className="text-sm text-red-600">{actionError}</p>}
         </div>
       )}

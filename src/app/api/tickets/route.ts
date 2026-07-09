@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createTicketSchema } from "@/lib/validation";
-import { generateReference } from "@/lib/constants";
+import { generateReference, type OrganizationValue } from "@/lib/constants";
 
 export async function GET(req: NextRequest) {
   const email = req.nextUrl.searchParams.get("email")?.trim().toLowerCase();
@@ -42,12 +42,13 @@ export async function POST(req: NextRequest) {
   }
 
   const data = parsed.data;
+  const organization = data.organization as OrganizationValue;
 
-  let reference = generateReference();
+  let reference = generateReference(organization);
   for (let attempt = 0; attempt < 5; attempt++) {
     const existing = await prisma.ticket.findUnique({ where: { reference } });
     if (!existing) break;
-    reference = generateReference();
+    reference = generateReference(organization);
   }
 
   const ticket = await prisma.ticket.create({
