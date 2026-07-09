@@ -34,6 +34,16 @@ function fileTimestamp() {
   return new Date().toISOString().slice(0, 19).replace(/[:T]/g, "-");
 }
 
+// Ticket fields come from the public, unauthenticated submit form. Excel
+// (and other spreadsheet apps) treat a leading =, +, -, or @ as the start
+// of a formula regardless of the cell's declared type, so a submitter
+// could otherwise embed a formula (e.g. a HYPERLINK or DDE payload) that
+// runs when an admin opens an exported report. Prefixing with a single
+// quote forces spreadsheet apps to treat the value as literal text.
+function sanitizeCell(value: string): string {
+  return /^[=+\-@\t\r]/.test(value) ? `'${value}` : value;
+}
+
 export async function exportTicketsToPdf(tickets: ReportTicket[], meta: ReportMeta) {
   const { default: jsPDF } = await import("jspdf");
   const { default: autoTable } = await import("jspdf-autotable");
@@ -95,12 +105,12 @@ export async function exportTicketsToExcel(tickets: ReportTicket[], meta: Report
     sheet.addRow({
       reference: t.reference,
       organization: orgLabel(t.organization),
-      requesterName: t.requesterName,
-      requesterEmail: t.requesterEmail,
-      phone: t.phone ?? "",
-      department: t.department ?? "",
-      subject: t.subject,
-      description: t.description,
+      requesterName: sanitizeCell(t.requesterName),
+      requesterEmail: sanitizeCell(t.requesterEmail),
+      phone: sanitizeCell(t.phone ?? ""),
+      department: sanitizeCell(t.department ?? ""),
+      subject: sanitizeCell(t.subject),
+      description: sanitizeCell(t.description),
       priority: priorityLabel(t.priority),
       status: statusLabel(t.status),
       createdAt: new Date(t.createdAt).toLocaleString(),
