@@ -126,9 +126,11 @@ export default async function AdminPage({
                 </td>
                 <td className="px-4 py-3">
                   <div>{ticket.requesterName}</div>
-                  <div className="text-xs text-black/50">
-                    {ticket.requesterEmail}
-                  </div>
+                  {ticket.requesterEmail && (
+                    <div className="text-xs text-black/50">
+                      {ticket.requesterEmail}
+                    </div>
+                  )}
                 </td>
                 <td className="px-4 py-3">{priorityLabel(ticket.priority)}</td>
                 <td className="px-4 py-3">

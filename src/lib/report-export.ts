@@ -4,7 +4,7 @@ export type ReportTicket = {
   reference: string;
   organization: string;
   requesterName: string;
-  requesterEmail: string;
+  requesterEmail: string | null;
   phone: string | null;
   department: string | null;
   subject: string;
@@ -106,7 +106,7 @@ export async function exportTicketsToExcel(tickets: ReportTicket[], meta: Report
       reference: t.reference,
       organization: orgLabel(t.organization),
       requesterName: sanitizeCell(t.requesterName),
-      requesterEmail: sanitizeCell(t.requesterEmail),
+      requesterEmail: sanitizeCell(t.requesterEmail ?? ""),
       phone: sanitizeCell(t.phone ?? ""),
       department: sanitizeCell(t.department ?? ""),
       subject: sanitizeCell(t.subject),

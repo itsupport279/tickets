@@ -18,7 +18,7 @@ model Ticket {
   reference      String   @unique
   organization   String
   requesterName  String
-  requesterEmail String
+  requesterEmail String?
   phone          String?
   department     String?
   subject        String

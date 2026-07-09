@@ -117,12 +117,11 @@ export function AdminTicketForm() {
           />
         </Field>
 
-        <Field label="Requester email" htmlFor="requesterEmail">
+        <Field label="Requester email (optional)" htmlFor="requesterEmail">
           <input
             id="requesterEmail"
             name="requesterEmail"
             type="email"
-            required
             className={inputClass}
             placeholder={
               expectedDomain ? `jane@${expectedDomain}` : "jane@example.com"
@@ -130,7 +129,7 @@ export function AdminTicketForm() {
           />
           {expectedDomain && (
             <p className="text-xs text-black/50">
-              Must be a @{expectedDomain} address
+              If provided, must be a @{expectedDomain} address
             </p>
           )}
         </Field>

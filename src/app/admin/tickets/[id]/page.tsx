@@ -49,7 +49,7 @@ export default async function AdminTicketPage({
         </div>
         <div>
           <dt className="text-black/50">Email</dt>
-          <dd>{ticket.requesterEmail}</dd>
+          <dd>{ticket.requesterEmail ?? "—"}</dd>
         </div>
         {ticket.phone && (
           <div>

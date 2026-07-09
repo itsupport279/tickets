@@ -18,7 +18,7 @@ export async function GET(
     },
   });
 
-  const emailMatches = !email || ticket?.requesterEmail.toLowerCase() === email;
+  const emailMatches = !email || ticket?.requesterEmail?.toLowerCase() === email;
 
   if (!ticket || !emailMatches) {
     return NextResponse.json({ error: "Ticket not found" }, { status: 404 });

@@ -1,9 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import { generateReference, type OrganizationValue } from "@/lib/constants";
-import type { createTicketSchema } from "@/lib/validation";
+import type { createTicketSchema, createAdminTicketSchema } from "@/lib/validation";
 import type { z } from "zod";
 
-type CreateTicketInput = z.infer<typeof createTicketSchema>;
+type CreateTicketInput =
+  | z.infer<typeof createTicketSchema>
+  | z.infer<typeof createAdminTicketSchema>;
 
 export async function createTicketRecord(data: CreateTicketInput) {
   const organization = data.organization as OrganizationValue;
@@ -20,7 +22,7 @@ export async function createTicketRecord(data: CreateTicketInput) {
       reference,
       organization: data.organization,
       requesterName: data.requesterName,
-      requesterEmail: data.requesterEmail,
+      requesterEmail: data.requesterEmail || null,
       phone: data.phone || null,
       department: data.department || null,
       subject: data.subject,

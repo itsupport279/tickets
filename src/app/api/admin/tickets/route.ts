@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { buildTicketWhere } from "@/lib/ticket-filters";
-import { createTicketSchema } from "@/lib/validation";
+import { createAdminTicketSchema } from "@/lib/validation";
 import { createTicketRecord } from "@/lib/create-ticket";
 
 export async function GET(req: NextRequest) {
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json().catch(() => null);
-  const parsed = createTicketSchema.safeParse(body);
+  const parsed = createAdminTicketSchema.safeParse(body);
 
   if (!parsed.success) {
     const message = parsed.error.issues[0]?.message ?? "Invalid submission";

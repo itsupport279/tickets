@@ -12,27 +12,52 @@ const orgValues = ORGANIZATIONS.map((o) => o.value) as [string, ...string[]];
 const priorityValues = PRIORITIES.map((p) => p.value) as [string, ...string[]];
 const statusValues = STATUSES.map((s) => s.value) as [string, ...string[]];
 
+const baseTicketFields = {
+  organization: z.enum(orgValues),
+  requesterName: z.string().trim().min(2, "Name is too short").max(120),
+  phone: z.string().trim().max(30).optional().or(z.literal("")),
+  department: z.string().trim().max(120).optional().or(z.literal("")),
+  subject: z.string().trim().min(3, "Subject is too short").max(200),
+  description: z.string().trim().min(10, "Please add more detail").max(5000),
+  priority: z.enum(priorityValues).default("MEDIUM"),
+};
+
+function checkEmailDomain(
+  data: { organization: string; requesterEmail?: string },
+  ctx: z.RefinementCtx,
+) {
+  if (!data.requesterEmail) return;
+  const expected = ORG_EMAIL_DOMAINS[data.organization as OrganizationValue];
+  if (emailDomain(data.requesterEmail) !== expected) {
+    ctx.addIssue({
+      code: "custom",
+      message: `Email must be a @${expected} address for the selected organization`,
+      path: ["requesterEmail"],
+    });
+  }
+}
+
+// Public /submit form: email required and must match the org's domain.
 export const createTicketSchema = z
   .object({
-    organization: z.enum(orgValues),
-    requesterName: z.string().trim().min(2, "Name is too short").max(120),
+    ...baseTicketFields,
     requesterEmail: z.string().trim().email("Enter a valid email"),
-    phone: z.string().trim().max(30).optional().or(z.literal("")),
-    department: z.string().trim().max(120).optional().or(z.literal("")),
-    subject: z.string().trim().min(3, "Subject is too short").max(200),
-    description: z.string().trim().min(10, "Please add more detail").max(5000),
-    priority: z.enum(priorityValues).default("MEDIUM"),
   })
-  .superRefine((data, ctx) => {
-    const expected = ORG_EMAIL_DOMAINS[data.organization as OrganizationValue];
-    if (emailDomain(data.requesterEmail) !== expected) {
-      ctx.addIssue({
-        code: "custom",
-        message: `Email must be a @${expected} address for the selected organization`,
-        path: ["requesterEmail"],
-      });
-    }
-  });
+  .superRefine(checkEmailDomain);
+
+// Admin-created tickets: email optional, but must still match the org's
+// domain if one is provided.
+export const createAdminTicketSchema = z
+  .object({
+    ...baseTicketFields,
+    requesterEmail: z
+      .string()
+      .trim()
+      .email("Enter a valid email")
+      .optional()
+      .or(z.literal("")),
+  })
+  .superRefine(checkEmailDomain);
 
 export const updateTicketSchema = z.object({
   status: z.enum(statusValues).optional(),

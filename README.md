@@ -20,7 +20,10 @@ resolve tickets from all three organizations in one dashboard.
   Clicking a ticket lets an admin change status/priority, leave an update
   note (visible to the employee on the `/status` page), or delete it.
 - **`/admin/new`** — login required. Any admin can log a ticket on an
-  employee's behalf (e.g. from a phone call).
+  employee's behalf (e.g. from a phone call). Unlike `/submit`, the
+  requester's email is optional here — if given, it still has to match the
+  organization's domain, but a ticket can also be created with no email at
+  all (it just won't be findable via the email lookup on `/status`).
 - **`/admin/reports`** — login required. Filter tickets by organization and
   date range, then export the results as a PDF or an Excel (.xlsx) file.
 - **`/admin/admins`** — super admin only. Lists admin accounts and creates
