@@ -32,6 +32,20 @@ type LookupState =
   | { status: "deleted" }
   | { status: "error"; message: string };
 
+async function closeByReference(reference: string) {
+  const res = await fetch(`/api/tickets/${encodeURIComponent(reference)}`, {
+    method: "PATCH",
+  });
+  return res.ok;
+}
+
+async function deleteByReference(reference: string) {
+  const res = await fetch(`/api/tickets/${encodeURIComponent(reference)}`, {
+    method: "DELETE",
+  });
+  return res.ok;
+}
+
 export function StatusLookup() {
   const [state, setState] = useState<LookupState>({ status: "idle" });
   const [actionPending, setActionPending] = useState(false);
@@ -68,7 +82,7 @@ export function StatusLookup() {
     }
   }
 
-  async function fetchOpenList(email: string) {
+  async function fetchByEmail(email: string) {
     setState({ status: "loading" });
 
     try {
@@ -92,62 +106,93 @@ export function StatusLookup() {
     }
   }
 
-  async function handleClose(reference: string) {
-    if (!window.confirm("Close this ticket?")) {
-      return;
-    }
+  async function handleCloseFound(reference: string) {
+    if (!window.confirm("Close this ticket?")) return;
 
     setActionPending(true);
     setActionError(null);
 
-    try {
-      const res = await fetch(`/api/tickets/${encodeURIComponent(reference)}`, {
-        method: "PATCH",
-      });
-
-      if (!res.ok) {
-        setActionError("Failed to close the ticket.");
-        return;
-      }
-
-      setState((prev) =>
-        prev.status === "found" ? { ...prev, ticket: { ...prev.ticket, status: "CLOSED" } } : prev,
-      );
-    } catch {
-      setActionError("Network error. Please try again.");
-    } finally {
+    const ok = await closeByReference(reference);
+    if (!ok) {
+      setActionError("Failed to close the ticket.");
       setActionPending(false);
+      return;
     }
+
+    setState((prev) =>
+      prev.status === "found"
+        ? { ...prev, ticket: { ...prev.ticket, status: "CLOSED" } }
+        : prev,
+    );
+    setActionPending(false);
   }
 
-  async function handleDelete(reference: string) {
-    if (
-      !window.confirm(
-        "Delete this ticket permanently? This can't be undone.",
-      )
-    ) {
+  async function handleDeleteFound(reference: string) {
+    if (!window.confirm("Delete this ticket permanently? This can't be undone.")) {
       return;
     }
 
     setActionPending(true);
     setActionError(null);
 
-    try {
-      const res = await fetch(`/api/tickets/${encodeURIComponent(reference)}`, {
-        method: "DELETE",
-      });
-
-      if (!res.ok) {
-        setActionError("Failed to delete the ticket.");
-        return;
-      }
-
-      setState({ status: "deleted" });
-    } catch {
-      setActionError("Network error. Please try again.");
-    } finally {
+    const ok = await deleteByReference(reference);
+    if (!ok) {
+      setActionError("Failed to delete the ticket.");
       setActionPending(false);
+      return;
     }
+
+    setState({ status: "deleted" });
+    setActionPending(false);
+  }
+
+  async function handleCloseInList(reference: string) {
+    if (!window.confirm("Close this ticket?")) return;
+
+    setActionPending(true);
+    setActionError(null);
+
+    const ok = await closeByReference(reference);
+    if (!ok) {
+      setActionError("Failed to close the ticket.");
+      setActionPending(false);
+      return;
+    }
+
+    setState((prev) =>
+      prev.status === "list"
+        ? {
+            ...prev,
+            tickets: prev.tickets.map((t) =>
+              t.reference === reference ? { ...t, status: "CLOSED" } : t,
+            ),
+          }
+        : prev,
+    );
+    setActionPending(false);
+  }
+
+  async function handleDeleteInList(reference: string) {
+    if (!window.confirm("Delete this ticket permanently? This can't be undone.")) {
+      return;
+    }
+
+    setActionPending(true);
+    setActionError(null);
+
+    const ok = await deleteByReference(reference);
+    if (!ok) {
+      setActionError("Failed to delete the ticket.");
+      setActionPending(false);
+      return;
+    }
+
+    setState((prev) =>
+      prev.status === "list"
+        ? { ...prev, tickets: prev.tickets.filter((t) => t.reference !== reference) }
+        : prev,
+    );
+    setActionPending(false);
   }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -159,11 +204,11 @@ export function StatusLookup() {
     if (reference) {
       fetchSingle(reference, email);
     } else if (email) {
-      fetchOpenList(email);
+      fetchByEmail(email);
     } else {
       setState({
         status: "error",
-        message: "Enter a ticket reference, or your email to see all open tickets.",
+        message: "Enter a ticket reference, or your email to see all of your tickets.",
       });
     }
   }
@@ -192,8 +237,7 @@ export function StatusLookup() {
       </form>
       <p className="-mt-6 text-xs text-black/50">
         Enter your ticket number to check its status, or leave it blank and
-        enter your email instead to see all of your tickets that aren&apos;t
-        closed yet.
+        enter your email instead to see all of your tickets.
       </p>
 
       {state.status === "error" && (
@@ -208,16 +252,20 @@ export function StatusLookup() {
         <div className="space-y-3">
           <p className="text-sm font-medium">
             {state.tickets.length === 0
-              ? "No open tickets found for that email."
-              : `${state.tickets.length} open ticket${state.tickets.length === 1 ? "" : "s"}`}
+              ? "No tickets found for that email."
+              : `${state.tickets.length} ticket${state.tickets.length === 1 ? "" : "s"}`}
           </p>
+          {actionError && <p className="text-sm text-red-600">{actionError}</p>}
           <ul className="space-y-2">
             {state.tickets.map((ticket) => (
-              <li key={ticket.reference}>
+              <li
+                key={ticket.reference}
+                className="rounded-lg border border-black/10 p-4 text-sm"
+              >
                 <button
                   type="button"
                   onClick={() => fetchSingle(ticket.reference, state.email)}
-                  className="w-full rounded-lg border border-black/10 p-4 text-left text-sm hover:bg-black/[.02]"
+                  className="w-full text-left hover:opacity-70"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="font-mono text-xs text-black/60">
@@ -234,6 +282,27 @@ export function StatusLookup() {
                     {new Date(ticket.createdAt).toLocaleDateString()}
                   </p>
                 </button>
+
+                {ticket.status !== "CLOSED" && (
+                  <div className="mt-3 flex gap-3 border-t border-black/10 pt-3">
+                    <button
+                      type="button"
+                      disabled={actionPending}
+                      onClick={() => handleCloseInList(ticket.reference)}
+                      className="rounded-md border border-black/15 px-3 py-1.5 text-xs hover:bg-black/5 disabled:opacity-50"
+                    >
+                      Close
+                    </button>
+                    <button
+                      type="button"
+                      disabled={actionPending}
+                      onClick={() => handleDeleteInList(ticket.reference)}
+                      className="rounded-md border border-red-200 px-3 py-1.5 text-xs text-red-600 hover:bg-red-50 disabled:opacity-50"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
               </li>
             ))}
           </ul>
@@ -292,7 +361,7 @@ export function StatusLookup() {
               <button
                 type="button"
                 disabled={actionPending}
-                onClick={() => handleClose(state.ticket.reference)}
+                onClick={() => handleCloseFound(state.ticket.reference)}
                 className="rounded-md border border-black/15 px-4 py-2 text-sm hover:bg-black/5 disabled:opacity-50"
               >
                 Close ticket
@@ -301,7 +370,7 @@ export function StatusLookup() {
             <button
               type="button"
               disabled={actionPending}
-              onClick={() => handleDelete(state.ticket.reference)}
+              onClick={() => handleDeleteFound(state.ticket.reference)}
               className="rounded-md border border-red-200 px-4 py-2 text-sm text-red-600 hover:bg-red-50 disabled:opacity-50"
             >
               Delete ticket

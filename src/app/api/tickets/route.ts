@@ -13,7 +13,6 @@ export async function GET(req: NextRequest) {
   const tickets = await prisma.ticket.findMany({
     where: {
       requesterEmail: { equals: email, mode: "insensitive" },
-      status: { not: "CLOSED" },
     },
     orderBy: { createdAt: "desc" },
     select: {

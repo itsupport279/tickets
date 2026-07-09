@@ -17,8 +17,7 @@ export default function StatusPage() {
           </h1>
           <p className="text-sm text-black/60">
             Enter the ticket number you received, or leave it blank and
-            enter your email instead to see all of your tickets that are
-            still open.
+            enter your email instead to see all of your tickets.
           </p>
         </div>
         <StatusLookup />

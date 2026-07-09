@@ -12,8 +12,8 @@ organizations in one dashboard.
   `TSA-482913` for Sobha Academy, `SKT-482913` for SKECT.
 - **`/status`** — public lookup, no login. Enter the ticket number to check
   its status, or leave it blank and enter an email instead to see every
-  ticket tied to it that isn't closed. From a found ticket, anyone with the
-  ticket number can close or delete it.
+  ticket tied to it (any status). Open tickets — whether viewed singly or
+  in the email list — can be closed or deleted right there.
 - **`/admin`** — login required. Lists every ticket from both organizations
   with tabs/filters by organization, status, priority, and free-text search.
   Clicking a ticket lets an admin change status/priority, leave an update
