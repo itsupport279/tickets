@@ -1,30 +1,32 @@
-# Sobha Academy & SKECT Helpdesk
+# Sobha Academy, SKECT & Sobha Health Care Helpdesk
 
-A shared employee ticketing system for two organizations — **Sobha Academy**
-and **SKECT**. Employees submit tickets with no account required; a small
-admin team logs in to view, filter, and resolve tickets from both
-organizations in one dashboard.
+A shared employee ticketing system for three organizations — **Sobha
+Academy**, **SKECT**, and **Sobha Health Care**. Employees submit tickets
+with no account required; a small admin team logs in to view, filter, and
+resolve tickets from all three organizations in one dashboard.
 
 ## How it works
 
 - **`/submit`** — public form, no login. Employee picks their organization,
   fills in the issue, and gets a ticket number prefixed by organization —
-  `TSA-482913` for Sobha Academy, `SKT-482913` for SKECT.
+  `TSA-482913` for Sobha Academy, `SKT-482913` for SKECT, `SHC-482913` for
+  Sobha Health Care.
 - **`/status`** — public lookup, no login. Enter the ticket number to check
   its status, or leave it blank and enter an email instead to see every
   ticket tied to it (any status). Open tickets — whether viewed singly or
   in the email list — can be closed or deleted right there.
-- **`/admin`** — login required. Lists every ticket from both organizations
+- **`/admin`** — login required. Lists every ticket from all organizations
   with tabs/filters by organization, status, priority, and free-text search.
   Clicking a ticket lets an admin change status/priority, leave an update
   note (visible to the employee on the `/status` page), or delete it.
 - **`/admin/reports`** — login required. Filter tickets by organization and
   date range, then export the results as a PDF or an Excel (.xlsx) file.
 
-Organizations are plain string values (`SOBHA_ACADEMY`, `SKECT`) defined in
-[`src/lib/constants.ts`](src/lib/constants.ts), along with their reference
-prefixes (`ORG_REFERENCE_PREFIX`) and required email domains
-(`ORG_EMAIL_DOMAINS`) — add a third organization there if you ever need one.
+Organizations are plain string values (`SOBHA_ACADEMY`, `SKECT`,
+`SOBHA_HEALTH_CARE`) defined in [`src/lib/constants.ts`](src/lib/constants.ts),
+along with their reference prefixes (`ORG_REFERENCE_PREFIX`) and required
+email domains (`ORG_EMAIL_DOMAINS`) — add another organization there if you
+ever need one.
 
 ## Tech stack
 

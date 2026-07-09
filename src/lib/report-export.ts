@@ -69,7 +69,7 @@ export async function exportTicketsToExcel(tickets: ReportTicket[], meta: Report
   const ExcelJS = (await import("exceljs")).default;
 
   const workbook = new ExcelJS.Workbook();
-  workbook.creator = "Sobha Academy & SKECT Helpdesk";
+  workbook.creator = "Sobha Academy, SKECT & Sobha Health Care Helpdesk";
   workbook.created = new Date();
 
   const sheet = workbook.addWorksheet("Tickets");

@@ -1,6 +1,7 @@
 export const ORGANIZATIONS = [
   { value: "SOBHA_ACADEMY", label: "Sobha Academy" },
   { value: "SKECT", label: "SKECT" },
+  { value: "SOBHA_HEALTH_CARE", label: "Sobha Health Care" },
 ] as const;
 
 export type OrganizationValue = (typeof ORGANIZATIONS)[number]["value"];
@@ -8,6 +9,7 @@ export type OrganizationValue = (typeof ORGANIZATIONS)[number]["value"];
 export const ORG_EMAIL_DOMAINS: Record<OrganizationValue, string> = {
   SOBHA_ACADEMY: "thesobhaacademy.com",
   SKECT: "skect.in",
+  SOBHA_HEALTH_CARE: "skect.in",
 };
 
 export function emailDomain(email: string): string {
@@ -47,6 +49,7 @@ export function statusLabel(value: string): string {
 export const ORG_REFERENCE_PREFIX: Record<OrganizationValue, string> = {
   SOBHA_ACADEMY: "TSA",
   SKECT: "SKT",
+  SOBHA_HEALTH_CARE: "SHC",
 };
 
 export function generateReference(organization: OrganizationValue): string {
