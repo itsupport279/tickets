@@ -31,7 +31,6 @@ export function LoginForm() {
 
     const callbackUrl = searchParams.get("callbackUrl") ?? "/admin";
     router.push(callbackUrl);
-    router.refresh();
   }
 
   return (
