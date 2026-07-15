@@ -1,7 +1,7 @@
 export const ORGANIZATIONS = [
-  { value: "SOBHA_ACADEMY", label: "Sobha Academy" },
+  { value: "SOBHA_ACADEMY", label: "SOBHA_ACADEMY" },
   { value: "SKECT", label: "SKECT" },
-  { value: "SOBHA_HEALTH_CARE", label: "Sobha Health Care" },
+  { value: "SOBHA_HEALTH_CARE", label: "SOBHA_HEALTH_CARE" },
 ] as const;
 
 export type OrganizationValue = (typeof ORGANIZATIONS)[number]["value"];
