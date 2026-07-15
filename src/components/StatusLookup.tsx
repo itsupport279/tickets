@@ -33,17 +33,21 @@ type LookupState =
   | { status: "deleted" }
   | { status: "error"; message: string };
 
-async function closeByReference(reference: string) {
-  const res = await fetch(`/api/tickets/${encodeURIComponent(reference)}`, {
-    method: "PATCH",
-  });
+async function closeByReference(reference: string, email: string) {
+  const query = email ? `?email=${encodeURIComponent(email)}` : "";
+  const res = await fetch(
+    `/api/tickets/${encodeURIComponent(reference)}${query}`,
+    { method: "PATCH" },
+  );
   return res.ok;
 }
 
-async function deleteByReference(reference: string) {
-  const res = await fetch(`/api/tickets/${encodeURIComponent(reference)}`, {
-    method: "DELETE",
-  });
+async function deleteByReference(reference: string, email: string) {
+  const query = email ? `?email=${encodeURIComponent(email)}` : "";
+  const res = await fetch(
+    `/api/tickets/${encodeURIComponent(reference)}${query}`,
+    { method: "DELETE" },
+  );
   return res.ok;
 }
 
@@ -107,13 +111,13 @@ export function StatusLookup() {
     }
   }
 
-  async function handleCloseFound(reference: string) {
+  async function handleCloseFound(reference: string, email: string) {
     if (!window.confirm("Close this ticket?")) return;
 
     setActionPending(true);
     setActionError(null);
 
-    const ok = await closeByReference(reference);
+    const ok = await closeByReference(reference, email);
     if (!ok) {
       setActionError("Failed to close the ticket.");
       setActionPending(false);
@@ -128,7 +132,7 @@ export function StatusLookup() {
     setActionPending(false);
   }
 
-  async function handleDeleteFound(reference: string) {
+  async function handleDeleteFound(reference: string, email: string) {
     if (!window.confirm("Delete this ticket permanently? This can't be undone.")) {
       return;
     }
@@ -136,7 +140,7 @@ export function StatusLookup() {
     setActionPending(true);
     setActionError(null);
 
-    const ok = await deleteByReference(reference);
+    const ok = await deleteByReference(reference, email);
     if (!ok) {
       setActionError("Failed to delete the ticket.");
       setActionPending(false);
@@ -147,13 +151,13 @@ export function StatusLookup() {
     setActionPending(false);
   }
 
-  async function handleCloseInList(reference: string) {
+  async function handleCloseInList(reference: string, email: string) {
     if (!window.confirm("Close this ticket?")) return;
 
     setActionPending(true);
     setActionError(null);
 
-    const ok = await closeByReference(reference);
+    const ok = await closeByReference(reference, email);
     if (!ok) {
       setActionError("Failed to close the ticket.");
       setActionPending(false);
@@ -173,7 +177,7 @@ export function StatusLookup() {
     setActionPending(false);
   }
 
-  async function handleDeleteInList(reference: string) {
+  async function handleDeleteInList(reference: string, email: string) {
     if (!window.confirm("Delete this ticket permanently? This can't be undone.")) {
       return;
     }
@@ -181,7 +185,7 @@ export function StatusLookup() {
     setActionPending(true);
     setActionError(null);
 
-    const ok = await deleteByReference(reference);
+    const ok = await deleteByReference(reference, email);
     if (!ok) {
       setActionError("Failed to delete the ticket.");
       setActionPending(false);
@@ -287,7 +291,7 @@ export function StatusLookup() {
                     <button
                       type="button"
                       disabled={actionPending}
-                      onClick={() => handleCloseInList(ticket.reference)}
+                      onClick={() => handleCloseInList(ticket.reference, state.email)}
                       className="rounded-md border border-black/15 px-3 py-1.5 text-xs hover:bg-black/5 disabled:opacity-50"
                     >
                       Close
@@ -295,7 +299,7 @@ export function StatusLookup() {
                     <button
                       type="button"
                       disabled={actionPending}
-                      onClick={() => handleDeleteInList(ticket.reference)}
+                      onClick={() => handleDeleteInList(ticket.reference, state.email)}
                       className="rounded-md border border-red-200 px-3 py-1.5 text-xs text-red-600 hover:bg-red-50 disabled:opacity-50"
                     >
                       Delete
@@ -358,7 +362,7 @@ export function StatusLookup() {
               <button
                 type="button"
                 disabled={actionPending}
-                onClick={() => handleCloseFound(state.ticket.reference)}
+                onClick={() => handleCloseFound(state.ticket.reference, state.email)}
                 className="rounded-md border border-black/15 px-4 py-2 text-sm hover:bg-black/5 disabled:opacity-50"
               >
                 Close ticket
@@ -367,7 +371,7 @@ export function StatusLookup() {
             <button
               type="button"
               disabled={actionPending}
-              onClick={() => handleDeleteFound(state.ticket.reference)}
+              onClick={() => handleDeleteFound(state.ticket.reference, state.email)}
               className="rounded-md border border-red-200 px-4 py-2 text-sm text-red-600 hover:bg-red-50 disabled:opacity-50"
             >
               Delete ticket
