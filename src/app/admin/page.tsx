@@ -55,35 +55,40 @@ export default async function AdminPage({
         <div className="flex items-center gap-3">
           <Link
             href="/admin/new"
-            className="rounded-md border border-black/15 px-3 py-1.5 text-sm hover:bg-black/5"
+            className="rounded-md border border-green-300 bg-green-50 px-3 py-1.5 text-sm font-medium text-green-700 hover:bg-green-100"
+            title="Create a new ticket"
           >
-            New ticket
+            ✓ New ticket
           </Link>
           <Link
             href="/admin/reports"
-            className="rounded-md border border-black/15 px-3 py-1.5 text-sm hover:bg-black/5"
+            className="rounded-md border border-blue-300 bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700 hover:bg-blue-100"
+            title="View reports and analytics"
           >
-            Reports
+            📊 Reports
           </Link>
           {isSuperAdmin && (
             <>
               <Link
                 href="/admin/master"
-                className="rounded-md border border-black/15 px-3 py-1.5 text-sm hover:bg-black/5"
+                className="rounded-md border border-purple-300 bg-purple-50 px-3 py-1.5 text-sm font-medium text-purple-700 hover:bg-purple-100"
+                title="Master admin controls"
               >
-                Master Admin
+                ⚙️ Master Admin
               </Link>
               <Link
                 href="/admin/admins"
-                className="rounded-md border border-black/15 px-3 py-1.5 text-sm hover:bg-black/5"
+                className="rounded-md border border-amber-300 bg-amber-50 px-3 py-1.5 text-sm font-medium text-amber-700 hover:bg-amber-100"
+                title="Manage admin accounts"
               >
-                Admins
+                👤 Admins
               </Link>
               <Link
                 href="/admin/logs"
-                className="rounded-md border border-black/15 px-3 py-1.5 text-sm hover:bg-black/5"
+                className="rounded-md border border-slate-300 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
+                title="View login activity"
               >
-                Login logs
+                📋 Login logs
               </Link>
             </>
           )}
