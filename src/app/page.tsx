@@ -1,16 +1,12 @@
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Logo } from "@/components/Logo";
-import { HelpDeskIcon } from "@/components/Icons";
 
 export default function Home() {
   return (
     <>
       <Header />
       <main className="mx-auto flex max-w-5xl flex-1 flex-col items-center justify-center gap-10 px-6 py-20 text-center">
-        <div className="w-40 h-40">
-          <HelpDeskIcon className="w-full h-full" />
-        </div>
         <Logo imageWidth={200} showTagline className="mx-auto" />
         <div className="flex flex-wrap items-center justify-center gap-4">
           <Link
