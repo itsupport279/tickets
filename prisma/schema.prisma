@@ -46,13 +46,14 @@ model Note {
 }
 
 model Admin {
-  id           String          @id @default(cuid())
-  username     String          @unique
+  id           String                @id @default(cuid())
+  username     String                @unique
   passwordHash String
   name         String?
-  role         String          @default("ADMIN")
-  createdAt    DateTime        @default(now())
+  role         String                @default("ADMIN")
+  createdAt    DateTime              @default(now())
   loginLogs    AdminLoginLog[]
+  organizations AdminOrganization[]
 }
 
 model AdminLoginLog {
@@ -66,4 +67,45 @@ model AdminLoginLog {
 
   @@index([adminId])
   @@index([createdAt])
+}
+
+model OrganizationSettings {
+  id                String   @id @default(cuid())
+  organization      String   @unique
+  emailDomain       String
+  referencePrefix   String
+  description       String?
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  workflowStatuses  WorkflowStatus[]
+
+  @@index([organization])
+}
+
+model AdminOrganization {
+  id             String   @id @default(cuid())
+  adminId        String
+  admin          Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  organization   String
+  canManageAll   Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  @@unique([adminId, organization])
+  @@index([adminId])
+  @@index([organization])
+}
+
+model WorkflowStatus {
+  id                      String   @id @default(cuid())
+  organizationSettingsId  String
+  organizationSettings    OrganizationSettings @relation(fields: [organizationSettingsId], references: [id], onDelete: Cascade)
+  statusValue             String
+  label                   String
+  isDefault               Boolean  @default(false)
+  order                   Int      @default(0)
+  createdAt               DateTime @default(now())
+
+  @@unique([organizationSettingsId, statusValue])
+  @@index([organizationSettingsId])
 }

@@ -68,6 +68,12 @@ export default async function AdminPage({
           {isSuperAdmin && (
             <>
               <Link
+                href="/admin/master"
+                className="rounded-md border border-black/15 px-3 py-1.5 text-sm hover:bg-black/5"
+              >
+                Master Admin
+              </Link>
+              <Link
                 href="/admin/admins"
                 className="rounded-md border border-black/15 px-3 py-1.5 text-sm hover:bg-black/5"
               >
