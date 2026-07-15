@@ -31,7 +31,7 @@ export function AdminTicketForm({
     // requesterName isn't sent — the server always sets it to the
     // signed-in admin's username, so there's nothing to submit here.
     const payload = {
-      organization: formData.get("organization"),
+      organization: (formData.get("organization") as string).toUpperCase(),
       requesterEmail: formData.get("requesterEmail"),
       phone: formData.get("phone"),
       department: formData.get("department"),

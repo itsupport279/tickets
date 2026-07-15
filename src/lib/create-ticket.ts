@@ -8,7 +8,7 @@ type CreateTicketInput =
   | z.infer<typeof createAdminTicketSchema>;
 
 export async function createTicketRecord(data: CreateTicketInput) {
-  const organization = data.organization as OrganizationValue;
+  const organization = (data.organization as OrganizationValue).toUpperCase() as OrganizationValue;
 
   for (let attempt = 0; attempt < 5; attempt++) {
     const reference = generateReference(organization);
@@ -17,7 +17,7 @@ export async function createTicketRecord(data: CreateTicketInput) {
       return await prisma.ticket.create({
         data: {
           reference,
-          organization: data.organization,
+          organization,
           requesterName: data.requesterName,
           requesterEmail: data.requesterEmail || null,
           phone: data.phone || null,

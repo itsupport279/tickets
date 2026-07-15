@@ -25,7 +25,7 @@ export function TicketForm() {
     const formData = new FormData(form);
 
     const payload = {
-      organization: formData.get("organization"),
+      organization: (formData.get("organization") as string).toUpperCase(),
       requesterName: formData.get("requesterName"),
       requesterEmail: formData.get("requesterEmail"),
       phone: formData.get("phone"),
