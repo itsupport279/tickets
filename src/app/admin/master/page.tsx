@@ -3,6 +3,7 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { SignOutButton } from "@/components/SignOutButton";
+import { DataCleanupPanel } from "@/components/DataCleanupPanel";
 
 export const metadata: Metadata = {
   title: "Master Admin Dashboard | Helpdesk",
@@ -173,7 +174,7 @@ export default async function MasterAdminPage() {
       </div>
 
       {/* Recent Tickets */}
-      <div>
+      <div className="mb-8">
         <h2 className="mb-4 text-lg font-semibold">Recent Tickets</h2>
         <div className="overflow-x-auto rounded-lg border border-black/10">
           <table className="w-full text-left text-sm">
@@ -208,6 +209,12 @@ export default async function MasterAdminPage() {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Database Maintenance */}
+      <div>
+        <h2 className="mb-4 text-lg font-semibold">System Maintenance</h2>
+        <DataCleanupPanel />
       </div>
     </main>
   );
