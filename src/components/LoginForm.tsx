@@ -29,7 +29,10 @@ export function LoginForm() {
       return;
     }
 
-    const callbackUrl = searchParams.get("callbackUrl") ?? "/admin";
+    let callbackUrl = searchParams.get("callbackUrl") ?? "/admin";
+    if (callbackUrl && !callbackUrl.startsWith("/")) {
+      callbackUrl = "/admin";
+    }
     router.push(callbackUrl);
   }
 

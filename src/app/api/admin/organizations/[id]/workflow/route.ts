@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireSuperAdmin } from "@/lib/require-super-admin";
 
+interface WorkflowStatus {
+  statusValue: string;
+  label: string;
+  isDefault?: boolean;
+  order?: number;
+}
+
 export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -29,7 +36,7 @@ export async function PUT(
 
     // Create new statuses
     const created = await Promise.all(
-      body.statuses.map((status: any) =>
+      (body.statuses as WorkflowStatus[]).map((status) =>
         prisma.workflowStatus.create({
           data: {
             organizationSettingsId: id,

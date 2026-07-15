@@ -10,24 +10,34 @@ type CreateTicketInput =
 export async function createTicketRecord(data: CreateTicketInput) {
   const organization = data.organization as OrganizationValue;
 
-  let reference = generateReference(organization);
   for (let attempt = 0; attempt < 5; attempt++) {
-    const existing = await prisma.ticket.findUnique({ where: { reference } });
-    if (!existing) break;
-    reference = generateReference(organization);
+    const reference = generateReference(organization);
+
+    try {
+      return await prisma.ticket.create({
+        data: {
+          reference,
+          organization: data.organization,
+          requesterName: data.requesterName,
+          requesterEmail: data.requesterEmail || null,
+          phone: data.phone || null,
+          department: data.department || null,
+          subject: data.subject,
+          description: data.description,
+          priority: data.priority,
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        error.message.includes("Unique constraint failed")
+      ) {
+        if (attempt < 4) continue;
+        throw new Error("Failed to generate unique ticket reference");
+      }
+      throw error;
+    }
   }
 
-  return prisma.ticket.create({
-    data: {
-      reference,
-      organization: data.organization,
-      requesterName: data.requesterName,
-      requesterEmail: data.requesterEmail || null,
-      phone: data.phone || null,
-      department: data.department || null,
-      subject: data.subject,
-      description: data.description,
-      priority: data.priority,
-    },
-  });
+  throw new Error("Failed to generate unique ticket reference");
 }

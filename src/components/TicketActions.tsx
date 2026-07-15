@@ -73,8 +73,7 @@ export function TicketActions({
       return;
     }
 
-    router.push("/admin");
-    router.refresh();
+    startTransition(() => router.push("/admin"));
   }
 
   return (

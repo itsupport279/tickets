@@ -38,16 +38,31 @@ export async function GET(
 }
 
 export async function PATCH(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ reference: string }> },
 ) {
   const { reference } = await params;
+  const email = req.nextUrl.searchParams.get("email")?.trim().toLowerCase();
+
+  if (!email) {
+    return NextResponse.json(
+      { error: "Email verification required" },
+      { status: 400 },
+    );
+  }
 
   const ticket = await prisma.ticket.findUnique({
     where: { reference: reference.trim().toUpperCase() },
   });
   if (!ticket) {
     return NextResponse.json({ error: "Ticket not found" }, { status: 404 });
+  }
+
+  if (ticket.requesterEmail?.toLowerCase() !== email) {
+    return NextResponse.json(
+      { error: "Unauthorized to modify this ticket" },
+      { status: 403 },
+    );
   }
 
   const updated = await prisma.ticket.update({
@@ -59,16 +74,31 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ reference: string }> },
 ) {
   const { reference } = await params;
+  const email = req.nextUrl.searchParams.get("email")?.trim().toLowerCase();
+
+  if (!email) {
+    return NextResponse.json(
+      { error: "Email verification required" },
+      { status: 400 },
+    );
+  }
 
   const ticket = await prisma.ticket.findUnique({
     where: { reference: reference.trim().toUpperCase() },
   });
   if (!ticket) {
     return NextResponse.json({ error: "Ticket not found" }, { status: 404 });
+  }
+
+  if (ticket.requesterEmail?.toLowerCase() !== email) {
+    return NextResponse.json(
+      { error: "Unauthorized to delete this ticket" },
+      { status: 403 },
+    );
   }
 
   await prisma.ticket.delete({ where: { id: ticket.id } });
