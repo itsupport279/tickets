@@ -33,6 +33,19 @@ const DEFAULT_STATUSES = [
 ];
 
 async function main() {
+  // Fix: Convert all existing organization names to uppercase
+  const allOrganizations = await prisma.organizationSettings.findMany();
+  for (const org of allOrganizations) {
+    const upperCaseOrg = org.organization.toUpperCase();
+    if (org.organization !== upperCaseOrg) {
+      await prisma.organizationSettings.update({
+        where: { id: org.id },
+        data: { organization: upperCaseOrg },
+      });
+      console.log(`Fixed organization name: ${org.organization} → ${upperCaseOrg}`);
+    }
+  }
+
   const username = process.env.SEED_ADMIN_USERNAME ?? "admin";
   const explicitPassword = process.env.SEED_ADMIN_PASSWORD;
   const name = process.env.SEED_ADMIN_NAME ?? "Administrator";

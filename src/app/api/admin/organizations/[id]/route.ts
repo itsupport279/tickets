@@ -26,7 +26,9 @@ export async function PUT(
       where: { id },
       data: {
         emailDomain: body.emailDomain || undefined,
-        referencePrefix: body.referencePrefix || undefined,
+        referencePrefix: body.referencePrefix
+          ? body.referencePrefix.toString().toUpperCase().trim()
+          : undefined,
         description: body.description || undefined,
         isActive: typeof body.isActive === "boolean" ? body.isActive : undefined,
       },

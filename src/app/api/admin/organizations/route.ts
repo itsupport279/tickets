@@ -24,7 +24,10 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  if (body.referencePrefix.length > 3) {
+  const organizationName = body.organization.toString().toUpperCase().trim();
+  const referencePrefixUpper = body.referencePrefix.toString().toUpperCase().trim();
+
+  if (referencePrefixUpper.length > 3) {
     return NextResponse.json(
       { error: "Reference prefix must be 3 characters or less" },
       { status: 400 },
@@ -34,7 +37,7 @@ export async function POST(req: NextRequest) {
   try {
     // Check if organization already exists
     const existing = await prisma.organizationSettings.findUnique({
-      where: { organization: body.organization },
+      where: { organization: organizationName },
     });
 
     if (existing) {
@@ -47,10 +50,10 @@ export async function POST(req: NextRequest) {
     // Create organization with default workflow statuses
     const org = await prisma.organizationSettings.create({
       data: {
-        organization: body.organization,
+        organization: organizationName,
         emailDomain: body.emailDomain,
-        referencePrefix: body.referencePrefix.toUpperCase(),
-        description: body.description || body.organization,
+        referencePrefix: referencePrefixUpper,
+        description: body.description || organizationName,
         isActive: true,
       },
     });

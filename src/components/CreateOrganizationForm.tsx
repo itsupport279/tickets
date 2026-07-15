@@ -24,7 +24,10 @@ export function CreateOrganizationForm() {
       const response = await fetch("/api/admin/organizations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          organization: formData.organization.toUpperCase(),
+        }),
       });
 
       if (!response.ok) {

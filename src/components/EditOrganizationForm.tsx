@@ -34,7 +34,10 @@ export function EditOrganizationForm({
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
+          body: JSON.stringify({
+            ...formData,
+            referencePrefix: formData.referencePrefix.toUpperCase(),
+          }),
         },
       );
 
