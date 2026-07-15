@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { TicketForm } from "@/components/TicketForm";
+import { TicketIcon } from "@/components/Icons";
 
 export const metadata: Metadata = {
   title: "Submit a ticket | Helpdesk",
@@ -11,14 +12,19 @@ export default function SubmitPage() {
     <>
       <Header />
       <main className="mx-auto w-full max-w-2xl flex-1 px-6 py-12">
-        <div className="mb-8 space-y-1.5">
-          <h1 className="text-2xl font-semibold tracking-tight">
-            Submit a ticket
-          </h1>
-          <p className="text-sm text-black/60">
-            No account needed. You&apos;ll get a reference number to track
-            your ticket.
-          </p>
+        <div className="mb-8 flex flex-col items-center space-y-4">
+          <div className="w-24 h-24">
+            <TicketIcon className="w-full h-full" />
+          </div>
+          <div className="space-y-1.5 text-center">
+            <h1 className="text-2xl font-semibold tracking-tight">
+              Submit a ticket
+            </h1>
+            <p className="text-sm text-black/60">
+              No account needed. You&apos;ll get a reference number to track
+              your ticket.
+            </p>
+          </div>
         </div>
         <TicketForm />
       </main>

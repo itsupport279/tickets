@@ -9,6 +9,7 @@ import {
   type ReportTicket,
 } from "@/lib/report-export";
 import { StatusBadge } from "@/components/StatusBadge";
+import { ReportsIcon } from "@/components/Icons";
 
 export default function ReportsPage() {
   const [organization, setOrganization] = useState("ALL");
@@ -62,12 +63,17 @@ export default function ReportsPage() {
 
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-10">
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Ticket reports</h1>
-          <p className="text-sm text-black/60">
-            Filter by organization and date range, then export as PDF or Excel.
-          </p>
+      <div className="mb-8 flex items-start justify-between gap-6">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14">
+            <ReportsIcon className="w-full h-full" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight">Ticket reports</h1>
+            <p className="text-sm text-black/60">
+              Filter by organization and date range, then export as PDF or Excel.
+            </p>
+          </div>
         </div>
         <Link href="/admin" className="text-sm text-black/60 hover:underline">
           ← Back to dashboard

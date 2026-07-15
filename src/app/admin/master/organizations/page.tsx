@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { EditOrganizationForm } from "@/components/EditOrganizationForm";
 import { CreateOrganizationForm } from "@/components/CreateOrganizationForm";
+import { AdminIcon } from "@/components/Icons";
 
 export const metadata: Metadata = {
   title: "Organizations | Master Admin",
@@ -39,14 +40,19 @@ export default async function OrganizationsPage() {
         ← Back to Master Dashboard
       </Link>
 
-      <div className="mt-4 mb-8 space-y-1.5">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          Organization Settings
-        </h1>
-        <p className="text-sm text-black/60">
-          Manage configuration for {organizations.length} organization
-          {organizations.length === 1 ? "" : "s"}
-        </p>
+      <div className="mt-4 mb-8 flex items-center gap-4">
+        <div className="w-14 h-14">
+          <AdminIcon className="w-full h-full" />
+        </div>
+        <div className="space-y-1.5">
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Organization Settings
+          </h1>
+          <p className="text-sm text-black/60">
+            Manage configuration for {organizations.length} organization
+            {organizations.length === 1 ? "" : "s"}
+          </p>
+        </div>
       </div>
 
       <div className="mb-8">

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { CreateAdminForm } from "@/components/CreateAdminForm";
+import { AdminIcon } from "@/components/Icons";
 
 export const metadata: Metadata = {
   title: "Manage admins | Helpdesk",
@@ -35,11 +36,16 @@ export default async function AdminAdminsPage() {
       <Link href="/admin" className="text-sm text-black/60 hover:underline">
         ← Back to dashboard
       </Link>
-      <div className="mt-4 mb-8 space-y-1.5">
-        <h1 className="text-2xl font-semibold tracking-tight">Admins</h1>
-        <p className="text-sm text-black/60">
-          {admins.length} admin account{admins.length === 1 ? "" : "s"}
-        </p>
+      <div className="mt-4 mb-8 flex items-center gap-4">
+        <div className="w-14 h-14">
+          <AdminIcon className="w-full h-full" />
+        </div>
+        <div className="space-y-1.5">
+          <h1 className="text-2xl font-semibold tracking-tight">Admins</h1>
+          <p className="text-sm text-black/60">
+            {admins.length} admin account{admins.length === 1 ? "" : "s"}
+          </p>
+        </div>
       </div>
 
       <div className="mb-8 overflow-x-auto rounded-lg border border-black/10">

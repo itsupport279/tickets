@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { SecurityIcon } from "@/components/Icons";
 
 export const metadata: Metadata = {
   title: "Login logs | Helpdesk",
@@ -40,12 +41,17 @@ export default async function AdminLogsPage() {
       <Link href="/admin" className="text-sm text-black/60 hover:underline">
         ← Back to dashboard
       </Link>
-      <div className="mt-4 mb-8 space-y-1.5">
-        <h1 className="text-2xl font-semibold tracking-tight">Login logs</h1>
-        <p className="text-sm text-black/60">
-          {logs.length} login{logs.length === 1 ? "" : "s"} in the last{" "}
-          {RETENTION_DAYS} days
-        </p>
+      <div className="mt-4 mb-8 flex items-center gap-4">
+        <div className="w-14 h-14">
+          <SecurityIcon className="w-full h-full" />
+        </div>
+        <div className="space-y-1.5">
+          <h1 className="text-2xl font-semibold tracking-tight">Login logs</h1>
+          <p className="text-sm text-black/60">
+            {logs.length} login{logs.length === 1 ? "" : "s"} in the last{" "}
+            {RETENTION_DAYS} days
+          </p>
+        </div>
       </div>
 
       <div className="overflow-x-auto rounded-lg border border-black/10">

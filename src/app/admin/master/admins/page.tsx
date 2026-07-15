@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { CreateAdminForm } from "@/components/CreateAdminForm";
 import { AdminOrgAssignmentForm } from "@/components/AdminOrgAssignmentForm";
+import { AdminIcon } from "@/components/Icons";
 
 export const metadata: Metadata = {
   title: "Admin Access | Master Admin",
@@ -50,13 +51,18 @@ export default async function AdminsPage() {
         ← Back to Master Dashboard
       </Link>
 
-      <div className="mt-4 mb-8 space-y-1.5">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          Admin Access Management
-        </h1>
-        <p className="text-sm text-black/60">
-          {admins.length} admin account{admins.length === 1 ? "" : "s"}
-        </p>
+      <div className="mt-4 mb-8 flex items-center gap-4">
+        <div className="w-14 h-14">
+          <AdminIcon className="w-full h-full" />
+        </div>
+        <div className="space-y-1.5">
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Admin Access Management
+          </h1>
+          <p className="text-sm text-black/60">
+            {admins.length} admin account{admins.length === 1 ? "" : "s"}
+          </p>
+        </div>
       </div>
 
       {/* Admin Accounts Table */}

@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { SignOutButton } from "@/components/SignOutButton";
 import { DataCleanupPanel } from "@/components/DataCleanupPanel";
+import { AdminIcon } from "@/components/Icons";
 
 export const metadata: Metadata = {
   title: "Master Admin Dashboard | Helpdesk",
@@ -60,14 +61,19 @@ export default async function MasterAdminPage() {
 
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-10">
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            Master Admin Dashboard
-          </h1>
-          <p className="text-sm text-black/60">
-            System-wide configuration and monitoring
-          </p>
+      <div className="mb-8 flex items-center justify-between gap-6">
+        <div className="flex items-center gap-4">
+          <div className="w-16 h-16">
+            <AdminIcon className="w-full h-full" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight">
+              Master Admin Dashboard
+            </h1>
+            <p className="text-sm text-black/60">
+              System-wide configuration and monitoring
+            </p>
+          </div>
         </div>
         <div className="flex items-center gap-3">
           <Link
