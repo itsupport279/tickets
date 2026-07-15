@@ -1,19 +1,21 @@
 "use client";
 
-import { Admin } from "@prisma/client";
 import { FormEvent, useState } from "react";
-
-interface AdminWithOrgs extends Admin {
-  organizations: Array<{ organization: string; canManageAll: boolean }>;
-}
 
 interface Organization {
   organization: string;
-  description: string;
+  description: string | null;
 }
 
 interface AdminOrgAssignmentFormProps {
-  admin: AdminWithOrgs;
+  admin: {
+    id: string;
+    username: string;
+    name: string | null;
+    role: string;
+    createdAt: Date;
+    organizations: Array<{ organization: string; canManageAll: boolean }>;
+  };
   organizations: Organization[];
 }
 
