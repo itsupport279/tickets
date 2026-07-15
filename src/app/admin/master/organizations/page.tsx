@@ -3,6 +3,7 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { EditOrganizationForm } from "@/components/EditOrganizationForm";
+import { CreateOrganizationForm } from "@/components/CreateOrganizationForm";
 
 export const metadata: Metadata = {
   title: "Organizations | Master Admin",
@@ -46,6 +47,10 @@ export default async function OrganizationsPage() {
           Manage configuration for {organizations.length} organization
           {organizations.length === 1 ? "" : "s"}
         </p>
+      </div>
+
+      <div className="mb-8">
+        <CreateOrganizationForm />
       </div>
 
       <div className="space-y-8">
